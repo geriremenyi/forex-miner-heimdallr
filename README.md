@@ -1,1 +1,1 @@
-# forex-miner-heimdall
+# forex-miner-heimdallr
