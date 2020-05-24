@@ -1,0 +1,13 @@
+# Root folder
+/out
+
+# Build generated files in src
+/src/**/objd/**/*
+/src/**/obj/**/*
+/src/**/bin/**/*
+/src/**/gen/**/*
+/src/**/*.nuspec
+/src/**/[Ls]ogs/**/*
+
+# IDE specific files
+/**/.vscode/**/*
