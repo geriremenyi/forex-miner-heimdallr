@@ -10,4 +10,4 @@
 /src/**/[Ls]ogs/**/*
 
 # IDE specific files
-/**/.vscode/**/*
+/**/.vs/**/*
