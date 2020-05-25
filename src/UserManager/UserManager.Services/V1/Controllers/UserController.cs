@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Service.Controllers
+﻿namespace ForexMiner.Heimdallr.UserManager.Service.V1.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using ForexMiner.Heimdallr.UserManager.Model.Contracts;
 
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/users")]
     public class UserController : ControllerBase
     {
