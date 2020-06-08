@@ -68,8 +68,8 @@
             };
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{userId}")]
+        public void Delete(int userId)
         {
         }
     }
