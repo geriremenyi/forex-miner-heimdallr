@@ -1,4 +1,4 @@
-namespace UserManager.Services
+namespace ForexMiner.Heimdallr.UserManager.Services
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;

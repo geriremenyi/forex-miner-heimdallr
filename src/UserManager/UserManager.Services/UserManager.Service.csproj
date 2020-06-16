@@ -5,6 +5,7 @@
     <RootNamespace>ForexMiner.Heimdallr.UserManager.Service</RootNamespace>
     <UserSecretsId>349376a3-fc9c-45c0-bc67-70eb2b3d3119</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyName>ForexMiner.Heimdallr.UserManager.Service</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
