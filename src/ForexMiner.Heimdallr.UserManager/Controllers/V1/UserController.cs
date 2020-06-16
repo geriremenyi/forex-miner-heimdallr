@@ -1,9 +1,9 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Service.V1.Controllers
+﻿namespace ForexMiner.Heimdallr.UserManager.Controllers.V1
 {
     using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
-    using ForexMiner.Heimdallr.UserManager.Model.Contracts;
+    using ForexMiner.Heimdallr.DataModel.User.Contracts;
 
     [ApiController]
     [ApiVersion("1")]

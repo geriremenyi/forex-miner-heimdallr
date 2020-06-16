@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Model.Contracts
+﻿namespace ForexMiner.Heimdallr.DataModel.User.Contracts
 {
     using System.Runtime.Serialization;
 
