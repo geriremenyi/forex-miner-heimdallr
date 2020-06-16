@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Model.Database
+﻿namespace ForexMiner.Heimdallr.DataModel.User.Database
 {
     using System;
 

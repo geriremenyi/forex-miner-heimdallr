@@ -1,13 +1,9 @@
-# Root folder
-/out
+# Output folders
+out
+objd
+obj
+bin
+gen
 
-# Build generated files in src
-/src/**/objd/**/*
-/src/**/obj/**/*
-/src/**/bin/**/*
-/src/**/gen/**/*
-/src/**/*.nuspec
-/src/**/[Ls]ogs/**/*
-
-# IDE specific files
-/**/.vs/**/*
+# IDE files
+.vs
