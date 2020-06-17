@@ -4,15 +4,24 @@
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
     using ForexMiner.Heimdallr.Contracts.User;
+    using ForexMiner.Heimdallr.UserManager.Database;
+    using System.Linq;
 
     [ApiController]
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/users")]
     public class UserController : ControllerBase
     {
+        private readonly UserManagerDbContext _context;
+
+        public UserController(UserManagerDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IEnumerable<UserContract> Get()
-        {            
+        {
             return new List<UserContract>()
             {
                 new UserContract()
