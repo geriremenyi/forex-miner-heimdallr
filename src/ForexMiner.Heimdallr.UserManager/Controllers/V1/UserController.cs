@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
-    using ForexMiner.Heimdallr.DataModel.User.Contracts;
+    using ForexMiner.Heimdallr.Contracts.User;
 
     [ApiController]
     [ApiVersion("1")]
@@ -12,7 +12,7 @@
     {
         [HttpGet]
         public IEnumerable<UserContract> Get()
-        {
+        {            
             return new List<UserContract>()
             {
                 new UserContract()

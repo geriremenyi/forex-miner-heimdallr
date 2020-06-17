@@ -1,13 +1,19 @@
-﻿namespace ForexMiner.Heimdallr.DataModel.User.Contracts
+﻿namespace ForexMiner.Heimdallr.Contracts.User
 {
+    using System.ComponentModel.DataAnnotations;
     using System.Runtime.Serialization;
 
     [DataContract]
     public class AuthenticationContract
     {
         [DataMember]
+        [Required]
+        [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
+
         [DataMember]
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

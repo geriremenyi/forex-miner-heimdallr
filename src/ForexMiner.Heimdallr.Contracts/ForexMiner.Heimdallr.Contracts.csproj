@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ForexMiner.Heimdallr.Contracts</AssemblyName>
+    <RootNamespace>ForexMiner.Heimdallr.Contracts</RootNamespace>
   </PropertyGroup>
 
 </Project>
