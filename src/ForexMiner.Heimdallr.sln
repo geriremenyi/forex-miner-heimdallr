@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForexMiner.Heimdallr.UserManager", "ForexMiner.Heimdallr.UserManager\ForexMiner.Heimdallr.UserManager.csproj", "{4F8F0DBD-3A70-46AF-8759-1628049B5AFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForexMiner.Heimdallr.UserManager", "ForexMiner.Heimdallr.UserManager\ForexMiner.Heimdallr.UserManager.csproj", "{4F8F0DBD-3A70-46AF-8759-1628049B5AFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForexMiner.Heimdallr.DataModel", "ForexMiner.Heimdallr.DataModel\ForexMiner.Heimdallr.DataModel.csproj", "{6B703D38-2922-4899-9536-85CE3E53E936}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForexMiner.Heimdallr.Contracts", "ForexMiner.Heimdallr.Contracts\ForexMiner.Heimdallr.Contracts.csproj", "{6B703D38-2922-4899-9536-85CE3E53E936}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4F8F0DBD-3A70-46AF-8759-1628049B5AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,5 +41,11 @@ Global
 		{6B703D38-2922-4899-9536-85CE3E53E936}.Release|x64.Build.0 = Release|Any CPU
 		{6B703D38-2922-4899-9536-85CE3E53E936}.Release|x86.ActiveCfg = Release|Any CPU
 		{6B703D38-2922-4899-9536-85CE3E53E936}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {998F57B4-3ACC-4B65-AA75-519B5F39851A}
 	EndGlobalSection
 EndGlobal
