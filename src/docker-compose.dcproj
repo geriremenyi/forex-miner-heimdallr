@@ -3,9 +3,9 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>ea8bdd27-4c3d-40c7-a4a1-db658de426c5</ProjectGuid>
+    <ProjectGuid>223da419-0c3c-4fc0-8311-20169c8ca91a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/{Scheme}://{ServiceHost}:{ServicePort}/api/v1/users</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/v1/users</DockerServiceUrl>
     <DockerServiceName>forexminer.heimdallr.usermanager</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
