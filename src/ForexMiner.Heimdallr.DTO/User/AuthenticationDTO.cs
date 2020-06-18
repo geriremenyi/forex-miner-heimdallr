@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class AuthenticationContract
+    public class AuthenticationDTO
     {
         [DataMember]
         [Required]

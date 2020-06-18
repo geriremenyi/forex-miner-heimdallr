@@ -5,7 +5,7 @@
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class UserContract
+    public class UserDTO
     {
         [DataMember]
         public Guid UserId { get; set; }

@@ -4,47 +4,30 @@
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
     using ForexMiner.Heimdallr.Contracts.User;
-    using ForexMiner.Heimdallr.UserManager.Database;
-    using System.Linq;
+    using ForexMiner.Heimdallr.UserManager.Services;
 
     [ApiController]
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/users")]
     public class UserController : ControllerBase
     {
-        private readonly UserManagerDbContext _context;
+        private readonly IUserService _userService;
 
-        public UserController(UserManagerDbContext context)
+        public UserController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         [HttpGet]
-        public IEnumerable<UserContract> Get()
+        public IEnumerable<UserDTO> Get()
         {
-            return new List<UserContract>()
-            {
-                new UserContract()
-                {
-                    UserId = new Guid(),
-                    EmailAddress = "user1@forex-miner.com",
-                    FirstName = "User1",
-                    LastName = "ForexMiner"
-                },
-                new UserContract()
-                {
-                    UserId = new Guid(),
-                    EmailAddress = "user2@forex-miner.com",
-                    FirstName = "User2",
-                    LastName = "ForexMiner"
-                }
-            };
+            return _userService.GetAllUsers();
         }
 
         [HttpGet("{userId}")]
-        public UserContract Get(Guid userId)
+        public UserDTO Get(Guid userId)
         {
-            return new UserContract()
+            return new UserDTO()
             {
                 UserId = userId,
                 EmailAddress = $"{userId}@forex-miner.com",
@@ -54,9 +37,9 @@
         }
 
         [HttpPost]
-        public UserContract Post([FromBody] RegistrationContract newUser)
+        public UserDTO Post([FromBody] RegistrationDTO newUser)
         {
-            return new UserContract()
+            return new UserDTO()
             {
                 UserId = new Guid(),
                 EmailAddress = newUser.EmailAddress,
@@ -66,9 +49,9 @@
         }
 
         [HttpPut("{userId}")]
-        public UserContract Put(Guid userId, [FromBody] RegistrationContract modifiedUser)
+        public UserDTO Put(Guid userId, [FromBody] RegistrationDTO modifiedUser)
         {
-            return new UserContract()
+            return new UserDTO()
             {
                 UserId = userId,
                 EmailAddress = modifiedUser.EmailAddress,
