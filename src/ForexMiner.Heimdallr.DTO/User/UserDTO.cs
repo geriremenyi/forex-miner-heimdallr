@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.Contracts.User
+﻿namespace ForexMiner.Heimdallr.DTO.User
 {
     using System;
     using System.ComponentModel.DataAnnotations;

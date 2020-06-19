@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
-    using ForexMiner.Heimdallr.Contracts.User;
+    using ForexMiner.Heimdallr.DTO.User;
     using ForexMiner.Heimdallr.UserManager.Services;
 
     [ApiController]
@@ -27,42 +27,25 @@
         [HttpGet("{userId}")]
         public UserDTO Get(Guid userId)
         {
-            return new UserDTO()
-            {
-                UserId = userId,
-                EmailAddress = $"{userId}@forex-miner.com",
-                FirstName = $"{userId}",
-                LastName = "ForexMiner"
-            };
+            return _userService.GetUserById(userId);
         }
 
         [HttpPost]
-        public UserDTO Post([FromBody] RegistrationDTO newUser)
+        public UserDTO Post([FromBody] RegistrationDTO registration)
         {
-            return new UserDTO()
-            {
-                UserId = new Guid(),
-                EmailAddress = newUser.EmailAddress,
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName
-            };
+            return _userService.CreateUser(registration);
         }
 
-        [HttpPut("{userId}")]
-        public UserDTO Put(Guid userId, [FromBody] RegistrationDTO modifiedUser)
+        [HttpPatch("{userId}")]
+        public UserDTO Patch(Guid userId, [FromBody] UserUpdateDTO userUpdate)
         {
-            return new UserDTO()
-            {
-                UserId = userId,
-                EmailAddress = modifiedUser.EmailAddress,
-                FirstName = modifiedUser.FirstName,
-                LastName = modifiedUser.LastName
-            };
+            return _userService.UpdateUser(userId, userUpdate);
         }
 
         [HttpDelete("{userId}")]
-        public void Delete(int userId)
+        public void Delete(Guid userId)
         {
+            _userService.DeleteUser(userId);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Utilities
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.Contracts.User;
+    using ForexMiner.Heimdallr.DTO.User;
     using ForexMiner.Heimdallr.UserManager.Database;
     using System.Collections.Generic;
 
