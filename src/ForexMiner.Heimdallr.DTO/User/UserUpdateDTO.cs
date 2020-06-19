@@ -4,15 +4,21 @@
     using System.Runtime.Serialization;
 
     [DataContract]
-    public class AuthenticationDTO
+    public class UserUpdateDTO
     {
         [DataMember]
-        [Required]
         [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
 
         [DataMember]
-        [Required]
+        [MaxLength(50)]
+        public string FirstName { get; set; }
+
+        [DataMember]
+        [MaxLength(50)]
+        public string LastName { get; set; }
+
+        [DataMember]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

@@ -3,12 +3,16 @@ namespace ForexMiner.Heimdallr.UserManager
     using AutoMapper;
     using ForexMiner.Heimdallr.UserManager.Database;
     using ForexMiner.Heimdallr.UserManager.Services;
+    using Hellang.Middleware.ProblemDetails;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System.ComponentModel.DataAnnotations;
 
     public class Startup
     {
@@ -29,6 +33,18 @@ namespace ForexMiner.Heimdallr.UserManager
             services.AddControllers();
             services.AddApiVersioning();
 
+            // ProblemDetails
+            services.AddProblemDetails(setup =>
+            {
+                setup.Map<DTO.Exceptions.ProblemDetailsException>(exception => new ProblemDetails
+                {
+                    Type = $"https://httpstatuses.com/{((int) exception.Status)}",
+                    Title = exception.Status.ToString(),
+                    Detail = exception.Message,
+                    Status = (int) exception.Status
+                });
+            });
+
             // Automapper
             services.AddAutoMapper(typeof(Startup));
 
@@ -47,6 +63,9 @@ namespace ForexMiner.Heimdallr.UserManager
 
             // Database
             userManagerDbContext.Database.Migrate();
+
+            // ProblemDetails
+            app.UseProblemDetails();
 
             // Routing
             app.UseHttpsRedirection();
