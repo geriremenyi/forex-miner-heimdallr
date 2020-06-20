@@ -5,9 +5,11 @@
     using Microsoft.AspNetCore.Mvc;
     using ForexMiner.Heimdallr.DTO.User;
     using ForexMiner.Heimdallr.UserManager.Services;
+    using Microsoft.AspNetCore.Authorization;
 
     [ApiController]
     [ApiVersion("1")]
+    [Authorize]
     [Route("api/v{version:apiVersion}/users")]
     public class UserController : ControllerBase
     {
@@ -19,33 +21,41 @@
         }
 
         [HttpGet]
-        public IEnumerable<UserDTO> Get()
+        public IEnumerable<UserDTO> GetUsers()
         {
             return _userService.GetAllUsers();
         }
 
         [HttpGet("{userId}")]
-        public UserDTO Get(Guid userId)
+        public UserDTO GetUser(Guid userId)
         {
             return _userService.GetUserById(userId);
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        public UserDTO Post([FromBody] RegistrationDTO registration)
+        public UserDTO Register([FromBody] RegistrationDTO registration)
         {
             return _userService.CreateUser(registration);
         }
 
         [HttpPatch("{userId}")]
-        public UserDTO Patch(Guid userId, [FromBody] UserUpdateDTO userUpdate)
+        public UserDTO UpdateUser(Guid userId, [FromBody] UserUpdateDTO userUpdate)
         {
             return _userService.UpdateUser(userId, userUpdate);
         }
 
         [HttpDelete("{userId}")]
-        public void Delete(Guid userId)
+        public void DeleteUser(Guid userId)
         {
             _userService.DeleteUser(userId);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public AuthenticationResponseDTO Authenticate([FromBody] AuthenticationDTO authentication)
+        {
+            return _userService.Authenticate(authentication);
         }
     }
 }

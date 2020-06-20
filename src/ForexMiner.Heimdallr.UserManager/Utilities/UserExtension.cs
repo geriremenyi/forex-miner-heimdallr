@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Cryptography.KeyDerivation;
     using System;
     using System.Security.Cryptography;
+    using System.Text;
 
     public static class UserExtension
     {
@@ -14,17 +15,28 @@
             {
                 rng.GetBytes(salt);
             }
-            var password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            var password = HashPassword(plainPassword, salt);
+
+            user.PasswordSalt = salt.ToString();
+            user.PasswordHash = password;
+        }
+
+        public static bool IsPasswordCorrect(this User user, string plainPassword)
+        {
+            var hashedPassword = HashPassword(plainPassword, Encoding.ASCII.GetBytes(user.PasswordSalt));
+
+            return hashedPassword.Equals(user.PasswordHash);
+        }
+
+        private static string HashPassword(string plainPassword, byte[] salt)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
                password: plainPassword,
                salt: salt,
                prf: KeyDerivationPrf.HMACSHA1,
                iterationCount: 10000,
                numBytesRequested: 256 / 8)
             );
-
-            user.PasswordSalt = salt.ToString();
-            user.PasswordHash = password;
         }
-
     }
 }

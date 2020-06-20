@@ -15,5 +15,7 @@
         UserDTO UpdateUser(Guid userId, UserUpdateDTO userUpdate);
 
         void DeleteUser(Guid userId);
+
+        AuthenticationResponseDTO Authenticate(AuthenticationDTO authentication);
     }
 }

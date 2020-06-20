@@ -14,11 +14,13 @@
     {
         private readonly UserManagerDbContext _context;
         private readonly IMapper _mapper;
+        IUserSecretService _userSecretService;
 
-        public UserService(UserManagerDbContext context, IMapper mapper)
+        public UserService(UserManagerDbContext context, IMapper mapper, IUserSecretService userSecretService)
         {
             _context = context;
             _mapper = mapper;
+            _userSecretService = userSecretService;
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
@@ -34,7 +36,7 @@
         public UserDTO CreateUser(RegistrationDTO registration)
         {
             // Check if email address is not taken already
-            var userWithSameEmail = _context.Users.Where(user => user.EmailAddress == registration.EmailAddress).FirstOrDefault();
+            var userWithSameEmail = GetUserFromDbByEmail(registration.EmailAddress);
             if (userWithSameEmail != null)
             {
                 throw new ProblemDetailsException(HttpStatusCode.BadRequest, $"User with the email address {registration.EmailAddress} already registered.");
@@ -71,6 +73,20 @@
             return _mapper.Map<User, UserDTO>(user);
         }
 
+        public AuthenticationResponseDTO Authenticate(AuthenticationDTO authentication)
+        {
+            var user = GetUserFromDbByEmail(authentication.EmailAddress);
+            if (user == null || user.IsPasswordCorrect(authentication.Password))
+            {
+                throw new ProblemDetailsException(HttpStatusCode.NotFound, "Invalid email address or password");
+            }
+
+            var authResponse = _mapper.Map<User, AuthenticationResponseDTO>(user);
+            authResponse.AddNewJwtToken(_userSecretService.GetJwtEncryptionSecret());
+
+            return authResponse;
+        }
+
         public void DeleteUser(Guid userId)
         {
             _context.Remove(GetUserFromDbById(userId));
@@ -79,13 +95,18 @@
 
         private User GetUserFromDbById(Guid userId)
         {
-            var user = _context.Users.Where(user => user.UserId == userId).FirstOrDefault();
+            var user = _context.Users.SingleOrDefault(user => user.UserId == userId);
             if (user == null)
             {
                 throw new ProblemDetailsException(HttpStatusCode.NotFound, $"User with id {userId} not found.");
             }
 
             return user;
+        }
+
+        private User GetUserFromDbByEmail(string EmailAddress)
+        {
+            return _context.Users.SingleOrDefault(user => user.EmailAddress == EmailAddress);
         }
     }
 }
