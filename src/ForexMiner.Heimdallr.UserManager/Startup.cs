@@ -4,15 +4,16 @@ namespace ForexMiner.Heimdallr.UserManager
     using ForexMiner.Heimdallr.UserManager.Database;
     using ForexMiner.Heimdallr.UserManager.Services;
     using Hellang.Middleware.ProblemDetails;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using System.ComponentModel.DataAnnotations;
+    using Microsoft.IdentityModel.Tokens;
+    using System.Text;
 
     public class Startup
     {
@@ -48,8 +49,32 @@ namespace ForexMiner.Heimdallr.UserManager
             // Automapper
             services.AddAutoMapper(typeof(Startup));
 
+            // In-memory cache
+            services.AddMemoryCache();
+
+            // Auth
+            // configure jwt authentication
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("aYPg2QjKQBY4Uqx8")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             // UserManager services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserSecretService, UserSecretService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +95,7 @@ namespace ForexMiner.Heimdallr.UserManager
             // Routing
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

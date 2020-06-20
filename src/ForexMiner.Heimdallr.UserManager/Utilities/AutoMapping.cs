@@ -12,6 +12,7 @@
         {
             CreateMap<User, UserDTO>();
             CreateMap<RegistrationDTO, User>();
+            CreateMap<User, AuthenticationResponseDTO>();
         }
 
     }
