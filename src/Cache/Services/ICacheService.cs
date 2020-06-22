@@ -6,6 +6,12 @@
 
     public interface ICacheService
     {
-        public Task<T> GetOrCreateCache<T>(CacheType cacheType, string cacheNamespace, string cacheName, Func<T> cacheValueProvider);
+        public Task<T> GetOrCreateCacheValue<T>(
+            CacheType cacheType,
+            string cacheNamespace,
+            string cacheName,
+            Func<T> fallbackValueProvider,
+            CacheCreateTarget cacheCreateTarget = CacheCreateTarget.Local
+        );
     }
 }

@@ -6,10 +6,12 @@
 
     public class InMemoryCacheProvider : ICacheProvider
     {
+        private readonly MemoryCacheEntryOptions _innerCacheOptions;
         private readonly IMemoryCache _innerCache;
 
         public InMemoryCacheProvider(IMemoryCache innerCache)
         {
+            _innerCacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(1));
             _innerCache = innerCache;
         }
 
@@ -20,19 +22,13 @@
 
         public Task Set<T>(string key, T value)
         {
-            _innerCache.Set<T>(key, value);
+            _innerCache.Set<T>(key, value, _innerCacheOptions);
             return Task.CompletedTask;
         }
 
         public Task Remove<T>(string key)
         {
             _innerCache.Remove(key);
-            return Task.CompletedTask;
-        }
-
-        public Task Flush()
-        {
-            _innerCache.Dispose();
             return Task.CompletedTask;
         }
     }
