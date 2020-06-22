@@ -16,10 +16,7 @@
 
         public async Task<string> GetJwtEncryptionSecret()
         {
-            return await _cacheService.GetOrCreateCache<string>(CacheType.Secret, JwtConstants.Namespace, JwtConstants.EncryptionSecret, () =>
-            {
-                return "aYPg2QjKQBY4Uqx8";
-            });
+            return await _cacheService.GetOrCreateCacheValue<string>(CacheType.Secret, JwtConstants.Namespace, JwtConstants.EncryptionSecret, () => "aYPg2QjKQBY4Uqx8");
         }
     }
 }
