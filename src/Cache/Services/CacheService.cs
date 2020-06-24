@@ -25,12 +25,6 @@
             var localCacheValue = await _localCacheProvider.Get<T>(cacheKey);
             if (localCacheValue != null)
             {
-                // Update it in distributed cache if cache create target suggests
-                if (cacheCreateTarget == CacheCreateTarget.Both)
-                { 
-                    _ = _distributedCacheProvider.Set(cacheKey, localCacheValue);
-                }
-
                 return localCacheValue;
             }
 
