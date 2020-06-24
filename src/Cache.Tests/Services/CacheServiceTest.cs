@@ -50,35 +50,6 @@
         }
 
         [Fact]
-        public async void GetOrCreateCacheValue_CachePresentInLocalCache_BothCreationTarget()
-        {
-            // Arrange
-            var cacheType = CacheType.Secret;
-            var cacheNamespace = "CacheTest";
-            var cacheName = "NonExistingCacheKey";
-            var cacheKey = $"{cacheType}-{cacheNamespace}-{cacheName}";
-
-            string cacheLocalValue = "ThisIsFromTheLocalCache";
-            string cacheDistributedValue = "ThisIsFromTheDistributedCache";
-            var cacheProviderFunctionValue = "ThisIsFromTheCacheProviderFunction";
-
-            string cacheValueProviderFunction() => cacheProviderFunctionValue;
-
-            _localCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
-            _distributedCacheProviderMock.Setup(dcp => dcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheDistributedValue));
-
-            // Act
-            var obtainedCacheValue = await _cacheService.GetOrCreateCacheValue(cacheType, cacheNamespace, cacheName, cacheValueProviderFunction, CacheCreateTarget.Both);
-
-            // Assert
-            _localCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
-            _distributedCacheProviderMock.Verify(dcp => dcp.Get<string>(It.IsAny<string>()), Times.Never());
-            _localCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, It.IsAny<string>()), Times.Never());
-            _distributedCacheProviderMock.Verify(dcp => dcp.Set(cacheKey, cacheLocalValue));
-            Assert.Equal(cacheLocalValue, obtainedCacheValue);
-        }
-
-        [Fact]
         public async void GetOrCreateCacheValue_CachePresentInDistributedCache_DefaultLocalCreationTarget()
         {
             // Arrange

@@ -22,7 +22,7 @@
 
         public Task Set<T>(string key, T value)
         {
-            _innerCache.Set<T>(key, value, _innerCacheOptions);
+            _innerCache.Set(key, value, _innerCacheOptions);
             return Task.CompletedTask;
         }
 
