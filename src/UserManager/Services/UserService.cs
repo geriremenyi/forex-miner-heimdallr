@@ -1,6 +1,9 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Services
 {
     using AutoMapper;
+    using ForexMiner.Heimdallr.Cache.Services;
+    using ForexMiner.Heimdallr.Cache.Utilities;
+    using ForexMiner.Heimdallr.Data.Constants;
     using ForexMiner.Heimdallr.Data.Exceptions;
     using ForexMiner.Heimdallr.Data.User;
     using ForexMiner.Heimdallr.UserManager.Database;
@@ -15,13 +18,13 @@
     {
         private readonly UserManagerDbContext _context;
         private readonly IMapper _mapper;
-        IUserSecretService _userSecretService;
+        private readonly ICacheService _cacheService;
 
-        public UserService(UserManagerDbContext context, IMapper mapper, IUserSecretService userSecretService)
+        public UserService(UserManagerDbContext context, IMapper mapper, ICacheService cacheService)
         {
             _context = context;
             _mapper = mapper;
-            _userSecretService = userSecretService;
+            _cacheService = cacheService;
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
@@ -83,7 +86,7 @@
             }
 
             var authResponse = _mapper.Map<User, AuthenticationResponseDTO>(user);
-            authResponse.AddNewJwtToken(await _userSecretService.GetJwtEncryptionSecret());
+            authResponse.AddNewJwtToken(await _cacheService.GetOrCreateCacheValue<string>(CacheType.Secret, JwtConstants.Namespace, JwtConstants.EncryptionSecret, () => "aYPg2QjKQBY4Uqx8"));
 
             return authResponse;
         }
