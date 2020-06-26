@@ -74,7 +74,6 @@ namespace ForexMiner.Heimdallr.UserManager
 
             // UserManager services
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUserSecretService, UserSecretService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
