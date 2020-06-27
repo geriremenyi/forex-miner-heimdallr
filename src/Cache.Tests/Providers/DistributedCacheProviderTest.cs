@@ -12,7 +12,7 @@
     public class DistributedCacheProviderTest
     {
         private readonly Mock<IDistributedCache> _innerCacheMock;
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IDistributedCacheProvider _cacheProvider;
 
         public DistributedCacheProviderTest()
         {

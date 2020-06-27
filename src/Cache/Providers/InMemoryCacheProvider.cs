@@ -4,7 +4,7 @@
     using System;
     using System.Threading.Tasks;
 
-    public class InMemoryCacheProvider : ICacheProvider
+    public class InMemoryCacheProvider : IInMemoryCacheProvider
     {
         private readonly MemoryCacheEntryOptions _innerCacheOptions;
         private readonly IMemoryCache _innerCache;

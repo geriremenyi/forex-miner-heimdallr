@@ -6,20 +6,21 @@ services:
         environment:
             SA_PASSWORD: pfw3KXpLkDnE52ys
             ACCEPT_EULA: Y
-    #forexminer.heimdallr.redis:
-    #    image: redis:alpine
-    #    command: redis-server --requirepass JHG35TNgRSt6j3CB
-    #    ports:
-    #        - 6379:6379
-    #    volumes:
-    #        - $PWD/redis-data:/var/lib/redis
-    #        - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
-    #    environment:
-    #        - REDIS_REPLICATION_MODE=master
+    redis:
+        image: redis:alpine
+        command: redis-server --requirepass JHG35TNgRSt6j3CB
+        ports:
+            - 6379:6379
+        volumes:
+            - $PWD/redis-data:/var/lib/redis
+            - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+        environment:
+            - REDIS_REPLICATION_MODE=master
     forexminer.heimdallr.usermanager:
         image: ${DOCKER_REGISTRY-}forexminer.heimdallr.usermanager
         build:
             context: .
-            dockerfile: ForexMiner.Heimdallr.UserManager/Dockerfile
+            dockerfile: UserManager/Dockerfile
         depends_on:
             - sqlserver
+            - redis

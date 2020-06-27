@@ -6,6 +6,8 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileTag>forexminer.heimdallr.usermanager</DockerfileTag>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <AssemblyName>ForexMiner.Heimdallr.UserManager</AssemblyName>
+    <RootNamespace>ForexMiner.Heimdallr.UserManager</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
