@@ -11,9 +11,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cache", "Cache\Cache.csproj", "{10ED1014-EAC7-40B9-9461-2FD3C5324172}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecretManager", "SecretManager\SecretManager.csproj", "{8E72BD02-08E8-4F38-862D-FC637AB13EE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationManager", "ConfigurationManager\ConfigurationManager.csproj", "{8E72BD02-08E8-4F38-862D-FC637AB13EE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.Tests", "Cache.Tests\Cache.Tests.csproj", "{461137B5-BD32-4C59-BD03-D751B93C5D68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cache.Tests", "Cache.Tests\Cache.Tests.csproj", "{461137B5-BD32-4C59-BD03-D751B93C5D68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

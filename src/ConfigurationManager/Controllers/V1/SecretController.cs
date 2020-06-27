@@ -1,7 +1,7 @@
-﻿namespace ForexMiner.Heimdallr.SecretManager.Controllers
+﻿namespace ForexMiner.Heimdallr.ConfigurationManager.Controllers.V1
 {
+    using ForexMiner.Heimdallr.ConfigurationManager.Services.Secret;
     using ForexMiner.Heimdallr.Data.Secret;
-    using ForexMiner.Heimdallr.SecretManager.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +9,11 @@
     [ApiVersion("1")]
     [Authorize]
     [Route("api/secrets/namespaces/{secretNamespace}/name/{secretName}")]
-    public class SecretsController : ControllerBase
+    public class SecretController : ControllerBase
     {
         private readonly ISecretService _secretService;
 
-        public SecretsController(ISecretService secretService)
+        public SecretController(ISecretService secretService)
         {
             _secretService = secretService;
         }

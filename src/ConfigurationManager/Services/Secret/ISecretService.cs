@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.SecretManager.Services
+﻿namespace ForexMiner.Heimdallr.ConfigurationManager.Services.Secret
 {
     using ForexMiner.Heimdallr.Data.Secret;
 
