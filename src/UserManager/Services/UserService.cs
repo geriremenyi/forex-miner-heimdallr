@@ -86,7 +86,7 @@
             }
 
             var authResponse = _mapper.Map<User, AuthenticationResponseDTO>(user);
-            authResponse.AddNewJwtToken(await _cacheService.GetOrCreateCacheValue<string>(CacheType.Secret, JwtConstants.Namespace, JwtConstants.EncryptionSecret, () => "aYPg2QjKQBY4Uqx8"));
+            authResponse.AddNewJwtToken(await _cacheService.GetOrCreateCacheValue(CacheType.Secret, JwtConstants.Namespace, JwtConstants.EncryptionSecret, () => "aYPg2QjKQBY4Uqx8"));
 
             return authResponse;
         }

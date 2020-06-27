@@ -7,8 +7,8 @@
 
     public class CacheService : ICacheService
     {
-        private readonly ICacheProvider _inMemoryCacheProvider;
-        private readonly ICacheProvider _distributedCacheProvider;
+        private readonly IInMemoryCacheProvider _inMemoryCacheProvider;
+        private readonly IDistributedCacheProvider _distributedCacheProvider;
 
         public CacheService(IInMemoryCacheProvider inMemoryCacheProvider, IDistributedCacheProvider distributedCacheProvider)
         {
@@ -16,7 +16,7 @@
             _distributedCacheProvider = distributedCacheProvider;
         }
 
-        public async Task<T> GetOrCreateCacheValue<T>(CacheType cacheType, string cacheNamespace, string cacheName, Func<T> fallbackValueProvider, CacheCreateTarget cacheCreateTarget = CacheCreateTarget.Local)
+        public async Task<T> GetOrCreateCacheValue<T>(CacheType cacheType, string cacheNamespace, string cacheName, Func<T> fallbackValueProvider, CacheCreateTarget cacheCreateTarget = CacheCreateTarget.InMemory)
         {
             // Construct string cache key
             var cacheKey = GetCacheKey(cacheType, cacheNamespace, cacheName);
@@ -48,7 +48,7 @@
                     _ = _distributedCacheProvider.Set(cacheKey, cacheValueToSet);
                     break;
                 default:
-                case CacheCreateTarget.Local:
+                case CacheCreateTarget.InMemory:
                     _ = _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
                     break;
             }

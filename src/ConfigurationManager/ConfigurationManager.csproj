@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ForexMiner.Heimdallr.ConfigurationManager</AssemblyName>
+    <RootNamespace>ForexMiner.Heimdallr.ConfigurationManager</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,10 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\KeyVault\" />
   </ItemGroup>
 
 

@@ -11,7 +11,7 @@
             string cacheNamespace,
             string cacheName,
             Func<T> fallbackValueProvider,
-            CacheCreateTarget cacheCreateTarget = CacheCreateTarget.Local
+            CacheCreateTarget cacheCreateTarget = CacheCreateTarget.InMemory
         );
     }
 }
