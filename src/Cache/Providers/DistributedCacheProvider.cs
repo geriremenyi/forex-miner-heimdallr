@@ -5,7 +5,7 @@
     using System.Text.Json;
     using System.Threading.Tasks;
 
-    public class DistributedCacheProvider : ICacheProvider
+    public class DistributedCacheProvider : IDistributedCacheProvider
     {
         private readonly DistributedCacheEntryOptions _innerCacheOptions;
         private IDistributedCache _innerCache;

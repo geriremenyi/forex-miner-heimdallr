@@ -9,15 +9,15 @@
 
     public class CacheServiceTest
     {
-        private readonly Mock<ICacheProvider> _localCacheProviderMock;
-        private readonly Mock<ICacheProvider> _distributedCacheProviderMock;
+        private readonly Mock<IInMemoryCacheProvider> _inMemoryCacheProviderMock;
+        private readonly Mock<IDistributedCacheProvider> _distributedCacheProviderMock;
         private readonly ICacheService _cacheService;
 
         public CacheServiceTest()
         {
-            _localCacheProviderMock = new Mock<ICacheProvider>();
-            _distributedCacheProviderMock = new Mock<ICacheProvider>();
-            _cacheService = new CacheService(_localCacheProviderMock.Object, _distributedCacheProviderMock.Object);
+            _inMemoryCacheProviderMock = new Mock<IInMemoryCacheProvider>();
+            _distributedCacheProviderMock = new Mock<IDistributedCacheProvider>();
+            _cacheService = new CacheService(_inMemoryCacheProviderMock.Object, _distributedCacheProviderMock.Object);
         }
 
         [Fact]
@@ -35,16 +35,16 @@
 
             string cacheValueProviderFunction() => cacheProviderFunctionValue;
 
-            _localCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
+            _inMemoryCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
             _distributedCacheProviderMock.Setup(dcp => dcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheDistributedValue));
 
             // Act
             var obtainedCacheValue = await _cacheService.GetOrCreateCacheValue(cacheType, cacheNamespace, cacheName, cacheValueProviderFunction);
 
             // Assert
-            _localCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
             _distributedCacheProviderMock.Verify(dcp => dcp.Get<string>(It.IsAny<string>()), Times.Never());
-            _localCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, It.IsAny<string>()), Times.Never());
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, It.IsAny<string>()), Times.Never());
             _distributedCacheProviderMock.Verify(dcp => dcp.Set(cacheKey, It.IsAny<string>()), Times.Never());
             Assert.Equal(cacheLocalValue, obtainedCacheValue);
         }
@@ -64,16 +64,16 @@
 
             string cacheValueProviderFunction() => cacheProviderFunctionValue;
 
-            _localCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
+            _inMemoryCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
             _distributedCacheProviderMock.Setup(dcp => dcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheDistributedValue));
 
             // Act
             var obtainedCacheValue = await _cacheService.GetOrCreateCacheValue(cacheType, cacheNamespace, cacheName, cacheValueProviderFunction);
 
             // Assert
-            _localCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
             _distributedCacheProviderMock.Verify(dcp => dcp.Get<string>(cacheKey));
-            _localCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, cacheDistributedValue));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, cacheDistributedValue));
             _distributedCacheProviderMock.Verify(dcp => dcp.Set(cacheKey, It.IsAny<string>()), Times.Never());
             Assert.Equal(cacheDistributedValue, obtainedCacheValue);
         }
@@ -93,16 +93,16 @@
 
             string cacheValueProviderFunction() => cacheProviderFunctionValue;
 
-            _localCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
+            _inMemoryCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
             _distributedCacheProviderMock.Setup(dcp => dcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheDistributedValue));
 
             // Act
             var obtainedCacheValue = await _cacheService.GetOrCreateCacheValue(cacheType, cacheNamespace, cacheName, cacheValueProviderFunction);
 
             // Assert
-            _localCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
             _distributedCacheProviderMock.Verify(dcp => dcp.Get<string>(cacheKey));
-            _localCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, cacheProviderFunctionValue));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, cacheProviderFunctionValue));
             _distributedCacheProviderMock.Verify(dcp => dcp.Set(cacheKey, It.IsAny<string>()), Times.Never());
             Assert.Equal(cacheProviderFunctionValue, obtainedCacheValue);
         }
@@ -122,16 +122,16 @@
 
             string cacheValueProviderFunction() => cacheProviderFunctionValue;
 
-            _localCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
+            _inMemoryCacheProviderMock.Setup(lcp => lcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheLocalValue));
             _distributedCacheProviderMock.Setup(dcp => dcp.Get<string>(cacheKey)).Returns(Task.FromResult(cacheDistributedValue));
 
             // Act
             var obtainedCacheValue = await _cacheService.GetOrCreateCacheValue(cacheType, cacheNamespace, cacheName, cacheValueProviderFunction, CacheCreateTarget.Both);
 
             // Assert
-            _localCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Get<string>(cacheKey));
             _distributedCacheProviderMock.Verify(dcp => dcp.Get<string>(cacheKey));
-            _localCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, cacheProviderFunctionValue));
+            _inMemoryCacheProviderMock.Verify(lcp => lcp.Set(cacheKey, cacheProviderFunctionValue));
             _distributedCacheProviderMock.Verify(dcp => dcp.Set(cacheKey, cacheProviderFunctionValue));
             Assert.Equal(cacheProviderFunctionValue, obtainedCacheValue);
         }

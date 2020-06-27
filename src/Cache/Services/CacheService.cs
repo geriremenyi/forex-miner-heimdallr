@@ -7,12 +7,12 @@
 
     public class CacheService : ICacheService
     {
-        private readonly ICacheProvider _localCacheProvider;
+        private readonly ICacheProvider _inMemoryCacheProvider;
         private readonly ICacheProvider _distributedCacheProvider;
 
-        public CacheService(ICacheProvider localCacheProvider, ICacheProvider distributedCacheProvider)
+        public CacheService(IInMemoryCacheProvider inMemoryCacheProvider, IDistributedCacheProvider distributedCacheProvider)
         {
-            _localCacheProvider = localCacheProvider;
+            _inMemoryCacheProvider = inMemoryCacheProvider;
             _distributedCacheProvider = distributedCacheProvider;
         }
 
@@ -22,7 +22,7 @@
             var cacheKey = GetCacheKey(cacheType, cacheNamespace, cacheName);
 
             // Try to get cache value from local cache
-            var localCacheValue = await _localCacheProvider.Get<T>(cacheKey);
+            var localCacheValue = await _inMemoryCacheProvider.Get<T>(cacheKey);
             if (localCacheValue != null)
             {
                 return localCacheValue;
@@ -33,7 +33,7 @@
             if (distributedCacheValue != null)
             {
                 // "Download" value to local cache
-                _ = _localCacheProvider.Set(cacheKey, distributedCacheValue);
+                _ = _inMemoryCacheProvider.Set(cacheKey, distributedCacheValue);
                 return distributedCacheValue;
             }
 
@@ -44,12 +44,12 @@
             switch (cacheCreateTarget)
             {
                 case CacheCreateTarget.Both:
-                    _ = _localCacheProvider.Set(cacheKey, cacheValueToSet);
+                    _ = _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
                     _ = _distributedCacheProvider.Set(cacheKey, cacheValueToSet);
                     break;
                 default:
                 case CacheCreateTarget.Local:
-                    _ = _localCacheProvider.Set(cacheKey, cacheValueToSet);
+                    _ = _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
                     break;
             }
             

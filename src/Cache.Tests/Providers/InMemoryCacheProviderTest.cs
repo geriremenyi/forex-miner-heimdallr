@@ -8,7 +8,7 @@
     public class InMemoryCacheProviderTest
     {
         private readonly Mock<IMemoryCache> _innerCacheMock;
-        private readonly ICacheProvider _cacheProvider;
+        private readonly IInMemoryCacheProvider _cacheProvider;
 
         public InMemoryCacheProviderTest()
         {
