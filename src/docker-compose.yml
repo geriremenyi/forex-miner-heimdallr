@@ -18,11 +18,13 @@ services:
             - REDIS_REPLICATION_MODE=master
     forexminer.heimdallr.configurationmanager:
         image: ${DOCKER_REGISTRY-}forexminer.heimdallr.configurationmanager
+        ports:
+            - 32010:80
         build:
             context: .
             dockerfile: ConfigurationManager/Dockerfile
     forexminer.heimdallr.usermanager:
-        image: ${DOCKER_REGISTRY-}forexminer.heimdallr.usermanager
-        build:
+       image: ${DOCKER_REGISTRY-}forexminer.heimdallr.usermanager
+       build:
             context: .
             dockerfile: UserManager/Dockerfile

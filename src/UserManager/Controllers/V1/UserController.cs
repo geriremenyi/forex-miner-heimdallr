@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
-    using ForexMiner.Heimdallr.Data.User;
+    using ForexMiner.Heimdallr.Utilities.Data.User;
     using ForexMiner.Heimdallr.UserManager.Services;
     using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
