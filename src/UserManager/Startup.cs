@@ -1,23 +1,21 @@
 namespace ForexMiner.Heimdallr.UserManager
 {
-    using AutoMapper;
     using ForexMiner.Heimdallr.UserManager.Configuration;
     using ForexMiner.Heimdallr.UserManager.Database;
-    using Hellang.Middleware.ProblemDetails;
+    using ForexMiner.Heimdallr.Utilities.Configuration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
 
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -26,14 +24,14 @@ namespace ForexMiner.Heimdallr.UserManager
             services.AddControllers();
             services.AddApiVersioning();
 
+            // UserManager services and all dependencies
+            services.AddUserManagerServices(_configuration);
+
             // Exception handling
             services.AddProblemDetailsExceptionHandling();
 
             // JWT authentication
-            services.AddJwtAuthentication();
-
-            // UserManager services and all dependencies
-            services.AddUserManagerServices(Configuration);
+            //services.AddJwtAuthentication();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManagerDbContext userManagerDbContext)
@@ -42,11 +40,7 @@ namespace ForexMiner.Heimdallr.UserManager
             userManagerDbContext.Database.Migrate();
 
             // Exception handling
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseProblemDetails();
+            app.UseProblemDetails(env);
 
             // Routing and authentication
             app.UseHttpsRedirection();

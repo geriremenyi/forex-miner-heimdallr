@@ -1,6 +1,6 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Services
 {
-    using ForexMiner.Heimdallr.Data.User;
+    using ForexMiner.Heimdallr.Utilities.Data.User;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;

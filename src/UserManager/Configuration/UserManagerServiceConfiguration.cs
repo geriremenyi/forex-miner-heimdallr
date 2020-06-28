@@ -1,10 +1,10 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Configuration
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.Cache.Providers;
-    using ForexMiner.Heimdallr.Cache.Services;
     using ForexMiner.Heimdallr.UserManager.Database;
     using ForexMiner.Heimdallr.UserManager.Services;
+    using ForexMiner.Heimdallr.Utilities.Cache.Providers;
+    using ForexMiner.Heimdallr.Utilities.Cache.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

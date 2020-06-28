@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>223da419-0c3c-4fc0-8311-20169c8ca91a</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerLaunchAction>None</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/v1/users</DockerServiceUrl>
     <DockerServiceName>forexminer.heimdallr.usermanager</DockerServiceName>
   </PropertyGroup>

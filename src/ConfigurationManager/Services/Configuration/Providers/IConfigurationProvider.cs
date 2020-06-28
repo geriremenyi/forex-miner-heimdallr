@@ -1,6 +1,7 @@
-﻿namespace ForexMiner.Heimdallr.ConfigurationManager.Services.Configuration.Provider
+﻿namespace ForexMiner.Heimdallr.ConfigurationManager.Services.Configuration.Providers
 {
-    interface IConfigurationProvider
+    public interface IConfigurationProvider
     {
+        public Types.Configuration GetConfiguration(string key);
     }
 }

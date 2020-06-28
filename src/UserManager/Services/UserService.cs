@@ -1,11 +1,11 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Services
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.Cache.Services;
-    using ForexMiner.Heimdallr.Cache.Utilities;
-    using ForexMiner.Heimdallr.Data.Constants;
-    using ForexMiner.Heimdallr.Data.Exceptions;
-    using ForexMiner.Heimdallr.Data.User;
+    using ForexMiner.Heimdallr.Utilities.Cache.Services;
+    using ForexMiner.Heimdallr.Utilities.Cache.Types;
+    using ForexMiner.Heimdallr.Utilities.Data.Constants;
+    using ForexMiner.Heimdallr.Utilities.Data.Exceptions;
+    using ForexMiner.Heimdallr.Utilities.Data.User;
     using ForexMiner.Heimdallr.UserManager.Database;
     using ForexMiner.Heimdallr.UserManager.Utilities;
     using System;

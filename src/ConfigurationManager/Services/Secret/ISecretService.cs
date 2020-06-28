@@ -1,6 +1,6 @@
 ﻿namespace ForexMiner.Heimdallr.ConfigurationManager.Services.Secret
 {
-    using ForexMiner.Heimdallr.Data.Secret;
+    using ForexMiner.Heimdallr.Utilities.Data.Configuration.Secret;
     using System.Threading.Tasks;
 
     public interface ISecretService
