@@ -1,7 +1,6 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Configuration
 {
     using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using System.Text;

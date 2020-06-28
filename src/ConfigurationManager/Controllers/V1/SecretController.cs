@@ -4,6 +4,7 @@
     using ForexMiner.Heimdallr.Data.Secret;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
     [ApiController]
     [ApiVersion("1")]
@@ -18,9 +19,9 @@
             _secretService = secretService;
         }
 
-        public SecretDTO GetSecret(string secretNamespace, string secretName)
+        public async Task<SecretDTO> GetSecret(string secretNamespace, string secretName)
         {
-            return _secretService.GetSecret(secretNamespace, secretName);
+            return await _secretService.GetSecret(secretNamespace, secretName);
         }
 
     }
