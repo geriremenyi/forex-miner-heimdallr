@@ -9,7 +9,7 @@
 
     public static class AuthResponseExtension
     {
-        public static void AddNewJwtToken(this AuthenticationResponseDTO authResponse, string encryptionSecret)
+        public static void AddNewJwtToken(this AuthenticationResponseDTO authResponse, string issuerSigningKey)
         {
             // Token construction
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -20,7 +20,7 @@
                     new Claim(ClaimTypes.Name, authResponse.UserId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(encryptionSecret)), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(issuerSigningKey)), SecurityAlgorithms.HmacSha256Signature)
             };
 
             // Extend authentication response with the token created

@@ -17,6 +17,6 @@
 
         public void DeleteUser(Guid userId);
 
-        public Task<AuthenticationResponseDTO> Authenticate(AuthenticationDTO authentication);
+        public AuthenticationResponseDTO Authenticate(AuthenticationDTO authentication);
     }
 }

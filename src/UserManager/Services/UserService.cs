@@ -1,30 +1,30 @@
 ﻿namespace ForexMiner.Heimdallr.UserManager.Services
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.Utilities.Cache.Services;
-    using ForexMiner.Heimdallr.Utilities.Cache.Types;
     using ForexMiner.Heimdallr.Utilities.Data.Constants;
     using ForexMiner.Heimdallr.Utilities.Data.Exceptions;
     using ForexMiner.Heimdallr.Utilities.Data.User;
     using ForexMiner.Heimdallr.UserManager.Database;
-    using ForexMiner.Heimdallr.UserManager.Utilities;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+    using Caching.Library.Service;
+    using ForexMiner.Heimdallr.UserManager.Common;
+    using Microsoft.Extensions.Configuration;
 
     public class UserService : IUserService
     {
         private readonly UserManagerDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ICacheService _cacheService;
+        private readonly IConfiguration _configuration;
 
-        public UserService(UserManagerDbContext context, IMapper mapper, ICacheService cacheService)
+        public UserService(UserManagerDbContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
-            _cacheService = cacheService;
+            _configuration = configuration;
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
@@ -77,7 +77,7 @@
             return _mapper.Map<User, UserDTO>(user);
         }
 
-        public async Task<AuthenticationResponseDTO> Authenticate(AuthenticationDTO authentication)
+        public AuthenticationResponseDTO Authenticate(AuthenticationDTO authentication)
         {
             var user = GetUserFromDbByEmail(authentication.EmailAddress);
             if (user == null || user.IsPasswordCorrect(authentication.Password))
@@ -86,7 +86,7 @@
             }
 
             var authResponse = _mapper.Map<User, AuthenticationResponseDTO>(user);
-            authResponse.AddNewJwtToken(await _cacheService.GetOrCreateCacheValue(CacheType.Secret, JwtConstants.Namespace, JwtConstants.EncryptionSecret, () => "aYPg2QjKQBY4Uqx8"));
+            authResponse.AddNewJwtToken(_configuration["JWT:IssuerSigningKey"]);
 
             return authResponse;
         }
