@@ -6,12 +6,14 @@
 
     public class InMemoryCacheProvider : IInMemoryCacheProvider
     {
+        private static readonly int CACHE_EXPIRY_IN_MINS = 5;
+
         private readonly MemoryCacheEntryOptions _innerCacheOptions;
         private readonly IMemoryCache _innerCache;
 
         public InMemoryCacheProvider(IMemoryCache innerCache)
         {
-            _innerCacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(1));
+            _innerCacheOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(CACHE_EXPIRY_IN_MINS));
             _innerCache = innerCache;
         }
 
@@ -26,7 +28,7 @@
             return Task.CompletedTask;
         }
 
-        public Task Remove<T>(string key)
+        public Task Remove(string key)
         {
             _innerCache.Remove(key);
             return Task.CompletedTask;

@@ -31,7 +31,8 @@ namespace ForexMiner.Heimdallr.UserManager
             services.AddProblemDetailsExceptionHandling();
 
             // JWT authentication
-            //services.AddJwtAuthentication();
+            var serviceProvider = services.BuildServiceProvider();
+            services.AddJwtAuthentication("dummySigningKey");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManagerDbContext userManagerDbContext)
