@@ -7,11 +7,11 @@
     public interface ICacheService
     {
         public Task<T> GetOrCreateCacheValue<T>(
-            CacheType cacheType,
-            string cacheNamespace,
-            string cacheName,
-            Func<T> fallbackValueProvider,
+            string cacheKey,
+            Func<T> cacheValueProviderFunction,
             CacheCreateTarget cacheCreateTarget = CacheCreateTarget.InMemory
         );
+
+        public Task InvalidateCacheValue(string cacheKey);
     }
 }

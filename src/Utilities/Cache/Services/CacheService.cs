@@ -16,15 +16,17 @@
             _distributedCacheProvider = distributedCacheProvider;
         }
 
-        public async Task<T> GetOrCreateCacheValue<T>(CacheType cacheType, string cacheNamespace, string cacheName, Func<T> fallbackValueProvider, CacheCreateTarget cacheCreateTarget = CacheCreateTarget.InMemory)
+        public async Task<T> GetOrCreateCacheValue<T>(string cacheKey, Func<T> cacheValueProviderFunction, CacheCreateTarget cacheCreateTarget = CacheCreateTarget.InMemory)
         {
-            // Construct string cache key
-            var cacheKey = GetCacheKey(cacheType, cacheNamespace, cacheName);
-
             // Try to get cache value from local cache
             var localCacheValue = await _inMemoryCacheProvider.Get<T>(cacheKey);
             if (localCacheValue != null)
             {
+                if (cacheCreateTarget == CacheCreateTarget.Both) 
+                {
+                    // Touch distributed cache value to keep value alive
+                    _ = _distributedCacheProvider.Get<T>(cacheKey);
+                }
                 return localCacheValue;
             }
 
@@ -38,7 +40,7 @@
             }
 
             // Cache not found in any of the cache providers so obtain it using the given provider function
-            var cacheValueToSet = fallbackValueProvider.Invoke();
+            var cacheValueToSet = cacheValueProviderFunction.Invoke();
 
             // Fill in cache
             switch (cacheCreateTarget)
@@ -58,6 +60,13 @@
 
         }
 
-        private string GetCacheKey(CacheType cacheType, string cacheNamespace, string cacheName) => $"{cacheType}-{cacheNamespace}-{cacheName}";
+        public async Task InvalidateCacheValue(string cacheKey)
+        {
+            // Delete from local cache
+            await _inMemoryCacheProvider.Remove(cacheKey);
+
+            // Delete from distributed cache
+            await _distributedCacheProvider.Remove(cacheKey);
+        }
     }
 }

@@ -8,6 +8,6 @@
 
         public Task Set<T>(string key, T value);
 
-        public Task Remove<T>(string key);
+        public Task Remove(string key);
     }
 }

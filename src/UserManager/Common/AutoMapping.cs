@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Utilities
+﻿namespace ForexMiner.Heimdallr.UserManager.Common
 {
     using AutoMapper;
     using ForexMiner.Heimdallr.Utilities.Data.User;

@@ -7,12 +7,14 @@
 
     public class DistributedCacheProvider : IDistributedCacheProvider
     {
+        private static readonly int CACHE_EXPIRY_IN_MINS = 30;
+
         private readonly DistributedCacheEntryOptions _innerCacheOptions;
         private readonly IDistributedCache _innerCache;
 
         public DistributedCacheProvider(IDistributedCache innerCache)
         {
-            _innerCacheOptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5));
+            _innerCacheOptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(CACHE_EXPIRY_IN_MINS));
             _innerCache = innerCache;
         }
 
@@ -26,7 +28,7 @@
             await _innerCache.SetAsync(key, JsonSerializer.SerializeToUtf8Bytes(value), _innerCacheOptions);
         }
 
-        public async Task Remove<T>(string key)
+        public async Task Remove(string key)
         {
             await _innerCache.RemoveAsync(key);
         }
