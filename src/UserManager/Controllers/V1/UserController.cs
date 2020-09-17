@@ -54,7 +54,7 @@
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public Task<AuthenticationResponseDTO> Authenticate([FromBody] AuthenticationDTO authentication)
+        public AuthenticationResponseDTO Authenticate([FromBody] AuthenticationDTO authentication)
         {
             return _userService.Authenticate(authentication);
         }

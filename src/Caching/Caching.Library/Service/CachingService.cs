@@ -1,32 +1,29 @@
-﻿namespace ForexMiner.Heimdallr.Utilities.Cache.Services
+﻿namespace Caching.Library.Service
 {
-    using ForexMiner.Heimdallr.Utilities.Cache.Providers;
-    using ForexMiner.Heimdallr.Utilities.Cache.Types;
+    using Caching.Library.Providers.Distributed;
+    using Caching.Library.Providers.InMemory;
     using System;
     using System.Threading.Tasks;
 
-    public class CacheService : ICacheService
+    public class CachingService : ICachingService
     {
         private readonly IInMemoryCacheProvider _inMemoryCacheProvider;
         private readonly IDistributedCacheProvider _distributedCacheProvider;
 
-        public CacheService(IInMemoryCacheProvider inMemoryCacheProvider, IDistributedCacheProvider distributedCacheProvider)
+        public CachingService(IInMemoryCacheProvider inMemoryCacheProvider, IDistributedCacheProvider distributedCacheProvider)
         {
             _inMemoryCacheProvider = inMemoryCacheProvider;
             _distributedCacheProvider = distributedCacheProvider;
         }
 
-        public async Task<T> GetOrCreateCacheValue<T>(string cacheKey, Func<T> cacheValueProviderFunction, CacheCreateTarget cacheCreateTarget = CacheCreateTarget.InMemory)
+        public async Task<T> GetOrCreateValue<T>(string cacheKey, Func<T> cacheValueProviderFunction)
         {
             // Try to get cache value from local cache
             var localCacheValue = await _inMemoryCacheProvider.Get<T>(cacheKey);
             if (localCacheValue != null)
             {
-                if (cacheCreateTarget == CacheCreateTarget.Both) 
-                {
-                    // Touch distributed cache value to keep value alive
-                    _ = _distributedCacheProvider.Get<T>(cacheKey);
-                }
+                // Touch distributed cache to mark usage but otherwise return the local value
+                _ = _distributedCacheProvider.Get<T>(cacheKey);
                 return localCacheValue;
             }
 
@@ -43,24 +40,14 @@
             var cacheValueToSet = cacheValueProviderFunction.Invoke();
 
             // Fill in cache
-            switch (cacheCreateTarget)
-            {
-                case CacheCreateTarget.Both:
-                    _ = _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
-                    _ = _distributedCacheProvider.Set(cacheKey, cacheValueToSet);
-                    break;
-                default:
-                case CacheCreateTarget.InMemory:
-                    _ = _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
-                    break;
-            }
-            
+            _ = _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
+            _ = _distributedCacheProvider.Set(cacheKey, cacheValueToSet);
+
             // Return the obtained value 
             return cacheValueToSet;
-
         }
 
-        public async Task InvalidateCacheValue(string cacheKey)
+        public async Task InvalidateValue(string cacheKey)
         {
             // Delete from local cache
             await _inMemoryCacheProvider.Remove(cacheKey);

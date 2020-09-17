@@ -1,6 +1,5 @@
 ﻿namespace ForexMiner.Heimdallr.Utilities.Configuration
 {
-    using ForexMiner.Heimdallr.Utilities.Cache.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
@@ -8,7 +7,7 @@
 
     public static class JwtAuthenticationConfiguration
     {
-        public static void AddJwtAuthentication(this IServiceCollection services, ICacheService cacheService)
+        public static void AddJwtAuthentication(this IServiceCollection services, string issuerSigningKey)
         {
             services.AddAuthentication(x =>
             {
@@ -21,7 +20,7 @@
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenSigningKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(issuerSigningKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };

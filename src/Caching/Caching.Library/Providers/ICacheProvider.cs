@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.Utilities.Cache.Providers
+﻿namespace Caching.Library.Providers
 {
     using System.Threading.Tasks;
 
