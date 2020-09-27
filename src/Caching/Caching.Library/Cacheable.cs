@@ -1,6 +1,6 @@
-﻿namespace Caching.Library
+﻿namespace ForexMiner.Heimdallr.Caching.Library
 {
-    using Caching.Library.Service;
+    using ForexMiner.Heimdallr.Caching.Library.Service;
     using System;
     using System.Threading.Tasks;
 
@@ -19,7 +19,7 @@
 
         public async Task<T> GetValue()
         {
-            return await _cachingService.GetOrCreateValue<T>(CacheKey, CacheValueProviderFunction);
+            return await _cachingService.GetOrCreateValue(CacheKey, CacheValueProviderFunction);
         }
 
         public async Task<T> GetValueWithForceRefresh()

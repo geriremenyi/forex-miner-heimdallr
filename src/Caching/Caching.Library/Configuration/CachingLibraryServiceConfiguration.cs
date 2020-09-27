@@ -1,8 +1,8 @@
-﻿namespace Caching.Library.Configuration
+﻿namespace ForexMiner.Heimdallr.Caching.Library.Configuration
 {
-    using Caching.Library.Providers.Distributed;
-    using Caching.Library.Providers.InMemory;
-    using Caching.Library.Service;
+    using ForexMiner.Heimdallr.Caching.Library.Providers.Distributed;
+    using ForexMiner.Heimdallr.Caching.Library.Providers.InMemory;
+    using ForexMiner.Heimdallr.Caching.Library.Service;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class CachingLibraryServiceConfiguration

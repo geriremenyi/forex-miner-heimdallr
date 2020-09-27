@@ -1,4 +1,4 @@
-﻿namespace Caching.Library.Providers.Distributed
+﻿namespace ForexMiner.Heimdallr.Caching.Library.Providers.Distributed
 {
     using Microsoft.Extensions.Caching.Distributed;
     using System;

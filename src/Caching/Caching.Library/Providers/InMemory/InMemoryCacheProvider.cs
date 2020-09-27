@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Threading.Tasks;
-
-namespace Caching.Library.Providers.InMemory
+﻿namespace ForexMiner.Heimdallr.Caching.Library.Providers.InMemory
 {
+    using Microsoft.Extensions.Caching.Memory;
+    using System;
+    using System.Threading.Tasks;
+
     public class InMemoryCacheProvider : IInMemoryCacheProvider
     {
         private static readonly int CACHE_EXPIRY_IN_MINS = 5;
