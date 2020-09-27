@@ -1,4 +1,4 @@
-﻿namespace Caching.Library.Providers.InMemory
+﻿namespace ForexMiner.Heimdallr.Caching.Library.Providers.InMemory
 {
     public interface IInMemoryCacheProvider : ICacheProvider
     {

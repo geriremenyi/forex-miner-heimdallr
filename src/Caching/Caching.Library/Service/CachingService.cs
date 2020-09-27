@@ -1,7 +1,7 @@
-﻿namespace Caching.Library.Service
+﻿namespace ForexMiner.Heimdallr.Caching.Library.Service
 {
-    using Caching.Library.Providers.Distributed;
-    using Caching.Library.Providers.InMemory;
+    using ForexMiner.Heimdallr.Caching.Library.Providers.Distributed;
+    using ForexMiner.Heimdallr.Caching.Library.Providers.InMemory;
     using System;
     using System.Threading.Tasks;
 
