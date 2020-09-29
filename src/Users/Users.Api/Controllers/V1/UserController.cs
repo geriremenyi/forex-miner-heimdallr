@@ -1,10 +1,10 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Controllers.V1
+﻿namespace ForexMiner.Heimdallr.Users.Api.Controllers.V1
 {
     using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
-    using ForexMiner.Heimdallr.Utilities.Data.User;
-    using ForexMiner.Heimdallr.UserManager.Services;
+    using ForexMiner.Heimdallr.Common.Data.User;
+    using ForexMiner.Heimdallr.Users.Api.Services;
     using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
 

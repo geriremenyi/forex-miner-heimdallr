@@ -1,6 +1,6 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Common
+﻿namespace ForexMiner.Heimdallr.Users.Api.Common
 {
-    using ForexMiner.Heimdallr.Utilities.Data.User;
+    using ForexMiner.Heimdallr.Common.Data.User;
     using Microsoft.IdentityModel.Tokens;
     using System;
     using System.IdentityModel.Tokens.Jwt;

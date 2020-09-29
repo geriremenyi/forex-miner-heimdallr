@@ -1,4 +1,4 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Database
+﻿namespace ForexMiner.Heimdallr.Users.Api.Database
 {
     using System;
     using System.ComponentModel.DataAnnotations;

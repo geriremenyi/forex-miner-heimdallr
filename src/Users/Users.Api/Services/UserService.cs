@@ -1,26 +1,23 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Services
+﻿namespace ForexMiner.Heimdallr.Users.Api.Services
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.Utilities.Data.Constants;
-    using ForexMiner.Heimdallr.Utilities.Data.Exceptions;
-    using ForexMiner.Heimdallr.Utilities.Data.User;
-    using ForexMiner.Heimdallr.UserManager.Database;
+    using ForexMiner.Heimdallr.Common.Data.Exceptions;
+    using ForexMiner.Heimdallr.Common.Data.User;
+    using ForexMiner.Heimdallr.Users.Api.Database;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using System.Threading.Tasks;
-    using Caching.Library.Service;
-    using ForexMiner.Heimdallr.UserManager.Common;
+    using ForexMiner.Heimdallr.Users.Api.Common;
     using Microsoft.Extensions.Configuration;
 
     public class UserService : IUserService
     {
-        private readonly UserManagerDbContext _context;
+        private readonly UsersApiDbContext _context;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public UserService(UserManagerDbContext context, IMapper mapper, IConfiguration configuration)
+        public UserService(UsersApiDbContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;

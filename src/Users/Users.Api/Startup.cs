@@ -1,8 +1,8 @@
-namespace ForexMiner.Heimdallr.UserManager
+namespace ForexMiner.Heimdallr.Users.Api
 {
-    using ForexMiner.Heimdallr.UserManager.Configuration;
-    using ForexMiner.Heimdallr.UserManager.Database;
-    using ForexMiner.Heimdallr.Utilities.Configuration;
+    using ForexMiner.Heimdallr.Users.Api.Configuration;
+    using ForexMiner.Heimdallr.Users.Api.Database;
+    using ForexMiner.Heimdallr.Common.ServiceConfiguration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -34,7 +34,7 @@ namespace ForexMiner.Heimdallr.UserManager
             services.AddJwtAuthentication(_configuration["JWT:IssuerSigningKey"]);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManagerDbContext userManagerDbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UsersApiDbContext userManagerDbContext)
         {
             // Custom middlewares for UserManager
             userManagerDbContext.Database.Migrate();
