@@ -1,8 +1,8 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Configuration
+﻿namespace ForexMiner.Heimdallr.Users.Api.Configuration
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.UserManager.Database;
-    using ForexMiner.Heimdallr.UserManager.Services;
+    using ForexMiner.Heimdallr.Users.Api.Database;
+    using ForexMiner.Heimdallr.Users.Api.Services;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@
         public static void AddUserManagerServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Database
-            services.AddDbContext<UserManagerDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ForexMinerDb")));
+            services.AddDbContext<UsersApiDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ForexMinerDb")));
 
             // Other utilities
             services.AddAutoMapper(typeof(Startup));

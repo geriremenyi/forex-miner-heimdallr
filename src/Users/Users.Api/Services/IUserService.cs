@@ -1,9 +1,8 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Services
+﻿namespace ForexMiner.Heimdallr.Users.Api.Services
 {
-    using ForexMiner.Heimdallr.Utilities.Data.User;
+    using ForexMiner.Heimdallr.Common.Data.User;
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     public interface IUserService
     {

@@ -1,9 +1,8 @@
-﻿namespace ForexMiner.Heimdallr.UserManager.Common
+﻿namespace ForexMiner.Heimdallr.Users.Api.Common
 {
     using AutoMapper;
-    using ForexMiner.Heimdallr.Utilities.Data.User;
-    using ForexMiner.Heimdallr.UserManager.Database;
-    using System.Collections.Generic;
+    using ForexMiner.Heimdallr.Common.Data.User;
+    using ForexMiner.Heimdallr.Users.Api.Database;
 
     public class AutoMapping : Profile
     {
