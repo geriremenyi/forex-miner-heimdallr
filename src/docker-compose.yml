@@ -16,15 +16,15 @@ services:
             - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
         environment:
             - REDIS_REPLICATION_MODE=master
-    forexminer.heimdallr.configurationmanager:
-        image: ${DOCKER_REGISTRY-}forexminer.heimdallr.configurationmanager
-        ports:
-            - 32010:80
-        build:
-            context: .
-            dockerfile: ConfigurationManager/Dockerfile
-    forexminer.heimdallr.usermanager:
-       image: ${DOCKER_REGISTRY-}forexminer.heimdallr.usermanager
+    #forexminer.heimdallr.configurationmanager:
+    #    image: ${DOCKER_REGISTRY-}forexminer.heimdallr.configurationmanager
+    #    ports:
+    #        - 32010:80
+    #    build:
+    #        context: .
+    #        dockerfile: ConfigurationManager/Dockerfile
+    forex-miner-heimdallr-user-api:
+       image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-user-api
        build:
             context: .
-            dockerfile: UserManager/Dockerfile
+            dockerfile: /Dockerfile
