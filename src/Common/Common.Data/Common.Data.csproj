@@ -6,4 +6,8 @@
     <RootNamespace>ForexMiner.Heimdallr.Common.Data</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="GeriRemenyi.Oanda.V20.Sdk" Version="0.0.2" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "HistoricalData.Worker": {
+    "Instruments.Worker": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

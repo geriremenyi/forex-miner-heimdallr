@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-Instruments.Worker-A19A7C62-1D64-4B67-ADE5-9C2D0D10B843</UserSecretsId>
+    <AssemblyName>ForexMiner.Heimdallr.Instruments.Worker</AssemblyName>
+    <RootNamespace>ForexMiner.Heimdallr.Instruments.Worker</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GeriRemenyi.Oanda.V20.Sdk" Version="0.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.Data\Common.Data.csproj" />
+    <ProjectReference Include="..\Instruments.Storage\Instruments.Storage.csproj" />
+  </ItemGroup>
+</Project>

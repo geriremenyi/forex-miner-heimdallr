@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>ForexMiner.Heimdallr.HistoricalData.Tests</AssemblyName>
+    <AssemblyName>ForexMiner.Heimdallr.Instruments.Tests</AssemblyName>
 
-    <RootNamespace>ForexMiner.Heimdallr.HistoricalData.Tests</RootNamespace>
+    <RootNamespace>ForexMiner.Heimdallr.Instruments.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

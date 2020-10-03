@@ -1,4 +1,4 @@
-namespace ForexMiner.Heimdallr.HistoricalData.Api.HistoricalData.Api
+namespace ForexMiner.Heimdallr.Instruments.Api.Instruments.Api
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
