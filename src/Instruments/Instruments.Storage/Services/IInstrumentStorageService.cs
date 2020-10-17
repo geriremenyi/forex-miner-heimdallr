@@ -1,14 +1,15 @@
 ﻿namespace ForexMiner.Heimdallr.Instruments.Storage.Services
 {
+    using ForexMiner.Heimdallr.Instruments.Storage.Model;
     using GeriRemenyi.Oanda.V20.Client.Model;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Candlestick = Model.Candlestick;
+    using Instrument = Model.Instrument;
 
     public interface IInstrumentStorageService
     {
-        public Task<IEnumerable<Candlestick>> GetMonthlyData(InstrumentName instrument, CandlestickGranularity granularity, int year, int month);
-
-        public Task AddMonthlyData(InstrumentName instrument, CandlestickGranularity granularity, int year, int month, IEnumerable<Model.Candlestick> data);
+        public Task<Instrument> GetInstrumentCandles(InstrumentName instrument, Granularity granularity, DateTime from, DateTime to);
+        public Task StoreInstrumentCandles(Instrument instrument);
     }
 }

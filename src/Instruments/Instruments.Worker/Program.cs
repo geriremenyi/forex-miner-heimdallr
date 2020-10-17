@@ -1,9 +1,11 @@
 namespace ForexMiner.Heimdallr.Instruments.Worker
 {
     using ForexMiner.Heimdallr.Instruments.Configuration;
+    using ForexMiner.Heimdallr.Instruments.Worker.Configuration;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System;
 
     public class Program
     {
@@ -16,8 +18,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    IConfiguration configuration = hostContext.Configuration;
-                    services.AddInstrumentStorageService(configuration["StorageAccount:Url"]);
+                    services.AddInstrumentsWorkerServices(hostContext.Configuration);
                     services.AddHostedService<Worker>();
                 });
     }

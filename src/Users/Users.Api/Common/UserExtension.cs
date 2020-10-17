@@ -1,6 +1,6 @@
 ﻿namespace ForexMiner.Heimdallr.Users.Api.Common
 {
-    using ForexMiner.Heimdallr.Users.Api.Database;
+    using ForexMiner.Heimdallr.Common.Data.Database.Models;
     using Microsoft.AspNetCore.Cryptography.KeyDerivation;
     using System;
     using System.Security.Cryptography;

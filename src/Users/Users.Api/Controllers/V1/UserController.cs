@@ -3,10 +3,9 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
-    using ForexMiner.Heimdallr.Common.Data.User;
+    using ForexMiner.Heimdallr.Common.Data.Contracts.User;
     using ForexMiner.Heimdallr.Users.Api.Services;
     using Microsoft.AspNetCore.Authorization;
-    using System.Threading.Tasks;
 
     [ApiController]
     [ApiVersion("1")]
@@ -21,42 +20,44 @@
             _userService = userService;
         }
 
-        [HttpGet]
-        public IEnumerable<UserDTO> GetUsers()
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public LoggedInUser Authenticate([FromBody] Authentication authentication)
         {
-            return _userService.GetAllUsers();
-        }
-
-        [HttpGet("{userId}")]
-        public UserDTO GetUser(Guid userId)
-        {
-            return _userService.GetUserById(userId);
+            return _userService.Authenticate(authentication);
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public UserDTO Register([FromBody] RegistrationDTO registration)
+        public User Register([FromBody] Registration registration)
         {
             return _userService.CreateUser(registration);
         }
 
+        [HttpGet("{userId}")]
+        public User GetUser(Guid userId)
+        {
+            return _userService.GetUserById(userId);
+        }
+
         [HttpPatch("{userId}")]
-        public UserDTO UpdateUser(Guid userId, [FromBody] UserUpdateDTO userUpdate)
+        public User UpdateUser(Guid userId, [FromBody] UserUpdate userUpdate)
         {
             return _userService.UpdateUser(userId, userUpdate);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IEnumerable<User> GetAllUsers()
+        {
+            return _userService.GetAllUsers();
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{userId}")]
         public void DeleteUser(Guid userId)
         {
             _userService.DeleteUser(userId);
-        }
-
-        [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public AuthenticationResponseDTO Authenticate([FromBody] AuthenticationDTO authentication)
-        {
-            return _userService.Authenticate(authentication);
         }
     }
 }

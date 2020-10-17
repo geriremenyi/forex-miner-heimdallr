@@ -1,6 +1,6 @@
 ﻿namespace ForexMiner.Heimdallr.Instruments.Api.Services
 {
-    using ForexMiner.Heimdallr.Instruments.Api.Database;
+    using ForexMiner.Heimdallr.Common.Data.Database.Models;
     using System.Collections.Generic;
     using System.Linq;
 

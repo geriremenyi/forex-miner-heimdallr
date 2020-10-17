@@ -1,8 +1,7 @@
 namespace ForexMiner.Heimdallr.Users.Api
 {
+    using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using ForexMiner.Heimdallr.Users.Api.Configuration;
-    using ForexMiner.Heimdallr.Users.Api.Database;
-    using ForexMiner.Heimdallr.Common.ServiceConfiguration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -24,26 +23,16 @@ namespace ForexMiner.Heimdallr.Users.Api
             services.AddControllers();
             services.AddApiVersioning();
 
-            // UserManager services and all dependencies
-            services.AddUserManagerServices(_configuration);
-
-            // Exception handling
-            services.AddProblemDetailsExceptionHandling();
-
-            // JWT authentication
-            services.AddJwtAuthentication(_configuration["JWT:IssuerSigningKey"]);
+            // All utility- and local services
+            services.AddUsersApiServices(_configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UsersApiDbContext userManagerDbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ForexMinerHeimdallrDbContext dbContext)
         {
-            // Custom middlewares for UserManager
-            userManagerDbContext.Database.Migrate();
-
-            // Exception handling
-            app.UseProblemDetails(env);
-
-            // Routing and authentication
-            app.UseHttpsRedirection();
+            // Custom 
+            app.UseUsersApiServices(env, dbContext);
+            
+            // System
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,21 +1,21 @@
 ﻿namespace ForexMiner.Heimdallr.Users.Api.Services
 {
-    using ForexMiner.Heimdallr.Common.Data.User;
+    using ForexMiner.Heimdallr.Common.Data.Contracts.User;
     using System;
     using System.Collections.Generic;
 
     public interface IUserService
     {
-        public IEnumerable<UserDTO> GetAllUsers();
+        public IEnumerable<User> GetAllUsers();
 
-        public UserDTO GetUserById(Guid userId);
+        public User GetUserById(Guid userId);
 
-        public UserDTO CreateUser(RegistrationDTO registration);
+        public User CreateUser(Registration registration);
 
-        public UserDTO UpdateUser(Guid userId, UserUpdateDTO userUpdate);
+        public User UpdateUser(Guid userId, UserUpdate userUpdate);
 
         public void DeleteUser(Guid userId);
 
-        public AuthenticationResponseDTO Authenticate(AuthenticationDTO authentication);
+        public LoggedInUser Authenticate(Authentication authentication);
     }
 }

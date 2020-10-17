@@ -1,20 +1,21 @@
 ﻿namespace ForexMiner.Heimdallr.Instruments.Api.Services
 {
-    using ForexMiner.Heimdallr.Instruments.Api.Database;
+    using ForexMiner.Heimdallr.Common.Data.Database.Context;
+    using ForexMiner.Heimdallr.Common.Data.Database.Models;
     using System.Collections.Generic;
 
     public class InstrumentService : IInstrumentService
     {
-        private InstrumentsApiDbContext _context;
+        private ForexMinerHeimdallrDbContext _dbContext;
 
-        public InstrumentService(InstrumentsApiDbContext context)
+        public InstrumentService(ForexMinerHeimdallrDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<Instrument> GetAllInstruments()
         {
-            return _context.Instruments;
+            return _dbContext.Instruments;
         }
     }
 }

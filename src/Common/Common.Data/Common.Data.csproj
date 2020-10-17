@@ -7,7 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Core" Version="1.5.1" />
+    <PackageReference Include="Azure.Identity" Version="1.2.3" />
     <PackageReference Include="GeriRemenyi.Oanda.V20.Sdk" Version="0.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Database\Migrations\" />
+    <Folder Include="Database\Configuration\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Caching\Common.Caching.csproj" />
   </ItemGroup>
 
 </Project>

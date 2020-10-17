@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 80
+
+WORKDIR /src
+COPY ["Common/Common.Data/Common.Data.csproj", "Common/Common.Data/"]
+COPY ["Common/Common.ServiceConfiguration/Common.ServiceConfiguration.csproj", "Common/Common.ServiceConfiguration/"]
+COPY ["Instruments/Instruments.Api/Instruments.Api.csproj", "Instruments/Instruments.Api/"]
+
+RUN dotnet restore "Instruments/Instruments.Api/Instruments.Api.csproj"
+COPY . .
+WORKDIR "/src/Instruments/Instruments.Api"
+RUN dotnet build --no-restore "Instruments.Api.csproj" -c $BUILD_CONFIGURATION
+
+RUN echo "exec dotnet run --no-build --no-launch-profile -c $BUILD_CONFIGURATION --" > /entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
