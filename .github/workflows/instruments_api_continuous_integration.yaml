@@ -18,7 +18,7 @@ jobs:
   instruments-api-test:
     name: Test  Instruments.Api
     runs-on: ubuntu-latest
-    needs: [insruments-api-build]
+    needs: [instruments-api-build]
     steps:
       - name: Setup .NET Core 3.x
         uses: actions/setup-dotnet@v1
@@ -33,7 +33,7 @@ jobs:
   instruments-api-docker-build:
     name: Docker build Instruments.Api
     runs-on: ubuntu-latest
-    needs: [insruments-api-build, instruments-api-test]
+    needs: [instruments-api-build, instruments-api-test]
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
