@@ -10,8 +10,13 @@ namespace ForexMiner.Heimdallr.Common.Extensions
 {
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using ForexMiner.Heimdallr.Common.Data.Database.Services;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Internal;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using System.Linq;
 
     /// <summary>
     /// Extensions for database configuration
@@ -23,23 +28,39 @@ namespace ForexMiner.Heimdallr.Common.Extensions
         /// </summary>
         /// <param name="services">The services</param>
         /// <param name="dbConnectionString">Database connection string</param>
-        public static void AddDatabase(this IServiceCollection services, string dbConnectionString, string redisConnectionString)
+        public static void AddDatabase(this IServiceCollection services, bool isDevelopmentEnvironment, string dbConnectionString, string redisConnectionString)
         {
-            // Caching services
-            services.AddCachingService(redisConnectionString);
-
-            // Token provider service
-            services.AddSingleton<IAzureSqlServerTokenProvider, AzureSqlServerTokenProvider>();
-
-            // Db connection interceptor
-            services.AddSingleton<TokenAuthenticationDbConnectionInterceptor>();
-
-            // Db context
-            services.AddDbContext<ForexMinerHeimdallrDbContext>((provider, options) =>
+            if (isDevelopmentEnvironment)
             {
-                options.UseSqlServer(dbConnectionString);
-                options.AddInterceptors(provider.GetRequiredService<TokenAuthenticationDbConnectionInterceptor>());
-            });
+                // Db context
+                services.AddDbContext<ForexMinerHeimdallrDbContext>((provider, options) => options.UseSqlServer(dbConnectionString));
+            }
+            else 
+            {
+                // Caching services
+                services.AddCachingService(redisConnectionString);
+
+                // Token provider service
+                services.AddSingleton<IAzureSqlServerTokenProvider, AzureSqlServerTokenProvider>();
+
+                // Db connection interceptor
+                services.AddSingleton<TokenAuthenticationDbConnectionInterceptor>();
+
+                // Db context
+                services.AddDbContext<ForexMinerHeimdallrDbContext>((provider, options) =>
+                {
+                    options.UseSqlServer(dbConnectionString);
+                    options.AddInterceptors(provider.GetRequiredService<TokenAuthenticationDbConnectionInterceptor>());
+                });
+            }
+        }
+
+        public static void MigrateDatabase(this ForexMinerHeimdallrDbContext dbContext)
+        {
+            if (dbContext.Database.GetPendingMigrations().Count() > 0)
+            {
+                dbContext.Database.Migrate();
+            }
         }
     }
 }

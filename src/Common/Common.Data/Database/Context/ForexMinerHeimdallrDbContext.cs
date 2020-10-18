@@ -40,5 +40,14 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Context
         /// </summary>
         /// <param name="options">Connection parameters</param>
         public ForexMinerHeimdallrDbContext(DbContextOptions<ForexMinerHeimdallrDbContext> options) : base(options) { }
+
+        /// <summary>
+        /// Seed database on model creation
+        /// </summary>
+        /// <param name="modelBuilder">Model builder instance</param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Seed();
+        }
     }
 }

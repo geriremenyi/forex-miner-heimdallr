@@ -9,9 +9,10 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
+    using Microsoft.Extensions.Hosting;
 
-    public static class InstrumentsApiConfigurationsExtensions {
-        public static void AddInstrumentsApiServices(this IServiceCollection services, IConfiguration configuration)
+    public static class InstrumentsApiConfigurationExtensions {
+        public static void AddInstrumentsApiServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
         {
             // Cors policy
             services.AddCorsPolicy();
@@ -23,7 +24,7 @@
             services.AddJwtAuthentication(configuration["Jwt:IssuerSigningKey"]);
 
             // Database
-            services.AddDatabase(configuration["Sql:ConnectionString"], configuration["Redis:ConnectionString"]);
+            services.AddDatabase(environment.IsDevelopment(), configuration["SqlServer:ConnectionString"], configuration["RedisCache:ConnectionString"]);
 
             // Local services
             services.AddScoped<IInstrumentService, InstrumentService>();
@@ -32,16 +33,16 @@
             services.AddInstrumentsStorageServices(configuration["StorageAccount:Url"]);
         }
 
-        public static void UseInstrumentsApiServices(this IApplicationBuilder app, IWebHostEnvironment env, ForexMinerHeimdallrDbContext dbContext)
+        public static void UseInstrumentsApiServices(this IApplicationBuilder app, IWebHostEnvironment environment, ForexMinerHeimdallrDbContext dbContext)
         {
             // CORS
             app.UseCorsPolicy();
 
             // ProblemDetails
-            app.UseProblemDetails(env);
+            app.UseProblemDetails(environment.IsDevelopment());
 
             // Database migration
-            dbContext.Database.Migrate();
+            dbContext.MigrateDatabase();
         }
     }
 }

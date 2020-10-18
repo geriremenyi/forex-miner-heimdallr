@@ -7,9 +7,9 @@
 
 namespace ForexMiner.Heimdallr.Common.Data.Database.Services
 {
+    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore.Diagnostics;
     using System.Data.Common;
-    using System.Data.SqlClient;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Services
         /// <summary>
         /// Host url of Azure sql server DBs
         /// </summary>
-        private const string AZURE_DB_HOST = "database.windiws.net";
+        private const string AZURE_DB_HOST = "database.windows.net";
 
         /// <summary>
         /// Azure token provider service

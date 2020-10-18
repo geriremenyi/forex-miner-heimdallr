@@ -1,5 +1,6 @@
 namespace ForexMiner.Heimdallr.Users.Api
 {
+    using ForexMiner.Heimdallr.Common.Extensions.Configuration;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
@@ -12,6 +13,7 @@ namespace ForexMiner.Heimdallr.Users.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureKeyVaultConfiguratioProvider()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -7,6 +7,8 @@ services:
     environment:
       SA_PASSWORD: pfw3KXpLkDnE52ys
       ACCEPT_EULA: Y
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "http://localhost:1433", "-U", "sa", "-P", "pfw3KXpLkDnE52ys", "-Q", "SELECT 1", "||", "exit 1"]
   redis-cache:
     container_name: redis-cache
     image: redis:alpine
@@ -32,6 +34,8 @@ services:
       dockerfile: Users/Users.Api/Dockerfile
     ports:
       - 32001:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - "sql-server"
   forex-miner-heimdallr-instruments-api:
@@ -42,6 +46,8 @@ services:
       dockerfile: Instruments/Instruments.Api/Dockerfile
     ports:
       - 32002:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - "sql-server"
       - "azure-storage-account"

@@ -42,9 +42,9 @@ namespace ForexMiner.Heimdallr.Common.Extensions
         /// </summary>
         /// <param name="app">The application builder</param>
         /// <param name="env">Environment</param>
-        public static void UseProblemDetails(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static void UseProblemDetails(this IApplicationBuilder app, bool isDevelopmentEnvironment)
         {
-            if (env.IsDevelopment())
+            if (isDevelopmentEnvironment)
             {
                 app.UseDeveloperExceptionPage();
             }

@@ -23,24 +23,24 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Models
         /// Unique identifier of the trade
         /// </summary>
         [Key]
-        Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// External broker connection where the trade was executed
         /// </summary>
         [Required]
-        BrokerConnection TradeExternalSource { get; set; }
+        public BrokerConnection TradeExternalSource { get; set; }
 
         /// <summary>
         /// External identifier of the trade in the external broker's system
         /// </summary>
         [Required]
-        Guid TradeExternalId { get; set; }
+        public Guid TradeExternalId { get; set; }
 
         /// <summary>
         /// Instrument the trade was executed on
         /// </summary>
         [Required]
-        InstrumentName Instrument { get; set; }
+        public InstrumentName Instrument { get; set; }
     }
 }
