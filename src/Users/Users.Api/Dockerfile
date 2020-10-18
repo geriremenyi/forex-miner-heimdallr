@@ -6,6 +6,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
+RUN ls -all
 COPY ["Users/Users.Api/Users.Api.csproj", "Users/Users.Api/"]
 COPY ["Caching/Caching.Library/Caching.Library.csproj", "Caching/Caching.Library/"]
 COPY ["Common/Common.Data/Common.Data.csproj", "Common/Common.Data/"]
