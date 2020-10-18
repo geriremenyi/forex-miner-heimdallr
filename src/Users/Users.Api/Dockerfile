@@ -5,14 +5,14 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR ./src
-COPY ["./Users/Users.Api/Users.Api.csproj", "Users/Users.Api/"]
-COPY ["./Caching/Caching.Library/Caching.Library.csproj", "Caching/Caching.Library/"]
-COPY ["./Common/Common.Data/Common.Data.csproj", "Common/Common.Data/"]
-COPY ["./Common/Common.ServiceConfiguration/Common.ServiceConfiguration.csproj", "Common/Common.ServiceConfiguration/"]
+WORKDIR /src
+COPY ["Users/Users.Api/Users.Api.csproj", "Users/Users.Api/"]
+COPY ["Caching/Caching.Library/Caching.Library.csproj", "Caching/Caching.Library/"]
+COPY ["Common/Common.Data/Common.Data.csproj", "Common/Common.Data/"]
+COPY ["Common/Common.ServiceConfiguration/Common.ServiceConfiguration.csproj", "Common/Common.ServiceConfiguration/"]
 RUN dotnet restore "Users/Users.Api/Users.Api.csproj"
 COPY . .
-WORKDIR "./src/Users/Users.Api"
+WORKDIR "/src/Users/Users.Api"
 RUN dotnet build "Users.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
