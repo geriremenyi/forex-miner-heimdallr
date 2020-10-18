@@ -15,24 +15,25 @@ jobs:
       
       - name: Build
         run: dotnet build ./src/Users/Users.Api/Users.Api.csproj
-  # users-api-test:
-  #   name: Test  Users.Api
-  #   runs-on: ubuntu-latest
-  #   needs: [users-api-build]
-  #   steps:
-  #     - name: Setup .NET Core 3.x
-  #       uses: actions/setup-dotnet@v1
-  #       with:
-  #         dotnet-version: 3.1.x
+  users-api-test:
+    name: Test  Users.Api
+    runs-on: ubuntu-latest
+    needs: [users-api-build]
+    steps:
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
 
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       
-  #     - name: Test
-  #       run: dotnet test ./src/Users/Users.Api.Tests/Users.Api.Tests.csproj
+      - name: Test
+        run: dotnet test ./src/Users/Users.Api.Tests/Users.Api.Tests.csproj
   users-api-docker-build:
     name: Docker build Users.Api
     runs-on: ubuntu-latest
+    needs: [users-api-build, users-api-test]
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1

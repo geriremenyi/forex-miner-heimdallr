@@ -8,7 +8,8 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Instruments/Instruments.Api/Instruments.Api.csproj", "Instruments/Instruments.Api/"]
 COPY ["Common/Common.Data/Common.Data.csproj", "Common/Common.Data/"]
-COPY ["Common/Common.ServiceConfiguration/Common.ServiceConfiguration.csproj", "Common/Common.ServiceConfiguration/"]
+COPY ["Common/Common.Caching/Common.Caching.csproj", "Common/Common.Caching/"]
+COPY ["Common/Common.Extensions/Common.Extensions.csproj", "Common/Common.Extensions/"]
 RUN dotnet restore "Instruments/Instruments.Api/Instruments.Api.csproj"
 COPY . .
 WORKDIR "/src/Instruments/Instruments.Api"
