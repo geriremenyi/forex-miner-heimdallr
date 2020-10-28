@@ -43,6 +43,18 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.Distributed
         }
 
         /// <summary>
+        /// Get cache value
+        /// </summary>
+        /// <typeparam name="T">Type of the cache value</typeparam>
+        /// <param name="key">Cache key</param>
+        /// <returns>Value of the cache</returns>
+        public T Get<T>(string key)
+        {
+            var cacheValue = _innerCache.Get(key);
+            return cacheValue == null ? default : JsonSerializer.Deserialize<T>(cacheValue);
+        }
+
+        /// <summary>
         /// Async get cache value
         /// </summary>
         /// <typeparam name="T">Type of the cache value</typeparam>
@@ -56,15 +68,14 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.Distributed
         }
 
         /// <summary>
-        /// Get cache value
+        /// Set cache
         /// </summary>
         /// <typeparam name="T">Type of the cache value</typeparam>
         /// <param name="key">Cache key</param>
-        /// <returns>Value of the cache</returns>
-        public T Get<T>(string key)
+        /// <param name="value">Cache value</param>
+        public void Set<T>(string key, T value)
         {
-            var cacheValue = _innerCache.Get(key);
-            return cacheValue == null ? default : JsonSerializer.Deserialize<T>(cacheValue);
+            _innerCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(value), _innerCacheOptions);
         }
 
         /// <summary>
@@ -80,14 +91,12 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.Distributed
         }
 
         /// <summary>
-        /// Set cache
+        /// Remove cache value
         /// </summary>
-        /// <typeparam name="T">Type of the cache value</typeparam>
         /// <param name="key">Cache key</param>
-        /// <param name="value">Cache value</param>
-        public void Set<T>(string key, T value)
+        public void Remove(string key)
         {
-            _innerCache.Set(key, JsonSerializer.SerializeToUtf8Bytes(value), _innerCacheOptions);
+            _innerCache.Remove(key);
         }
 
         /// <summary>
@@ -98,15 +107,6 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.Distributed
         public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
         {
             await _innerCache.RemoveAsync(key, cancellationToken);
-        }
-
-        /// <summary>
-        /// Remove cache value
-        /// </summary>
-        /// <param name="key">Cache key</param>
-        public void Remove(string key)
-        {
-            _innerCache.Remove(key);
         }
     }
 }

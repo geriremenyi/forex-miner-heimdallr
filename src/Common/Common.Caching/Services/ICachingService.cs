@@ -17,6 +17,15 @@ namespace ForexMiner.Heimdallr.Common.Caching.Services
     public interface ICachingService
     {
         /// <summary>
+        /// get or create cache value
+        /// </summary>
+        /// <typeparam name="T">Type of the value cached or to be cached</typeparam>
+        /// <param name="cacheKey">Key of the cache</param>
+        /// <param name="valueProviderFunc">Value provider function in case the value is not in the cache</param>
+        /// <returns>The requested cache value</returns>
+        public T GetOrCreateValue<T>(string cacheKey, Func<T> valueProviderFunc);
+
+        /// <summary>
         /// Async get or create cache value
         /// </summary>
         /// <typeparam name="T">Type of the value cached or to be cached</typeparam>
@@ -27,13 +36,10 @@ namespace ForexMiner.Heimdallr.Common.Caching.Services
         public Task<T> GetOrCreateValueAsync<T>(string cacheKey, Func<T> valueProviderFunc, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// get or create cache value
+        /// Async invalidate a cache value
         /// </summary>
-        /// <typeparam name="T">Type of the value cached or to be cached</typeparam>
-        /// <param name="cacheKey">Key of the cache</param>
-        /// <param name="valueProviderFunc">Value provider function in case the value is not in the cache</param>
-        /// <returns>The requested cache value</returns>
-        public T GetOrCreateValue<T>(string cacheKey, Func<T> valueProviderFunc);
+        /// <param name="cacheKey">The cache key to invalidate</param>
+        public void InvalidateValue(string cacheKey);
 
         /// <summary>
         /// Async invalidate a cache value
@@ -41,11 +47,5 @@ namespace ForexMiner.Heimdallr.Common.Caching.Services
         /// <param name="cacheKey">The cache key to invalidate</param>
         /// <param name="cancellationToken">The cancellation token</param>
         public Task InvalidateValueAsync(string cacheKey, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Async invalidate a cache value
-        /// </summary>
-        /// <param name="cacheKey">The cache key to invalidate</param>
-        public void InvalidateValue(string cacheKey);
     }
 }

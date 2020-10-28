@@ -42,6 +42,44 @@ namespace ForexMiner.Heimdallr.Common.Caching.Services
         }
 
         /// <summary>
+        /// Get or create cache value
+        /// </summary>
+        /// <typeparam name="T">Type of the value cached or to be cached</typeparam>
+        /// <param name="cacheKey">Key of the cache</param>
+        /// <param name="valueProviderFunc">Value provider function in case the value is not in the cache</param>
+        /// <returns>The requested cache value</returns>
+        public T GetOrCreateValue<T>(string cacheKey, Func<T> valueProviderFunc)
+        {
+            // Try to get cache value from local cache
+            var localCacheValue = _inMemoryCacheProvider.Get<T>(cacheKey);
+            if (localCacheValue != null)
+            {
+                // Touch distributed cache (async way without waiting for the result) to mark usage but otherwise return the local value
+                _ = _distributedCacheProvider.GetAsync<T>(cacheKey);
+                return localCacheValue;
+            }
+
+            // Try to get cache value from the distributed cache if not found in the local one
+            var distributedCacheValue = _distributedCacheProvider.Get<T>(cacheKey);
+            if (distributedCacheValue != null)
+            {
+                // "Download" value to local cache
+                _inMemoryCacheProvider.Set(cacheKey, distributedCacheValue);
+                return distributedCacheValue;
+            }
+
+            // Cache not found in any of the cache providers so obtain it using the given provider function
+            var cacheValueToSet = valueProviderFunc.Invoke();
+
+            // Fill in cache
+            _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
+            _distributedCacheProvider.Set(cacheKey, cacheValueToSet);
+
+            // Return the obtained value 
+            return cacheValueToSet;
+        }
+
+        /// <summary>
         /// Async get or create cache value
         /// </summary>
         /// <typeparam name="T">Type of the value cached or to be cached</typeparam>
@@ -81,41 +119,16 @@ namespace ForexMiner.Heimdallr.Common.Caching.Services
         }
 
         /// <summary>
-        /// get or create cache value
+        /// Async invalidate a cache value
         /// </summary>
-        /// <typeparam name="T">Type of the value cached or to be cached</typeparam>
-        /// <param name="cacheKey">Key of the cache</param>
-        /// <param name="valueProviderFunc">Value provider function in case the value is not in the cache</param>
-        /// <returns>The requested cache value</returns>
-        public T GetOrCreateValue<T>(string cacheKey, Func<T> valueProviderFunc)
+        /// <param name="cacheKey">The cache key to invalidate</param>
+        public void InvalidateValue(string cacheKey)
         {
-            // Try to get cache value from local cache
-            var localCacheValue = _inMemoryCacheProvider.Get<T>(cacheKey);
-            if (localCacheValue != null)
-            {
-                // Touch distributed cache (async way without waiting for the result) to mark usage but otherwise return the local value
-                _ = _distributedCacheProvider.GetAsync<T>(cacheKey);
-                return localCacheValue;
-            }
+            // Delete from local cache if present
+            _inMemoryCacheProvider.Remove(cacheKey);
 
-            // Try to get cache value from the distributed cache if not found in the local one
-            var distributedCacheValue = _distributedCacheProvider.Get<T>(cacheKey);
-            if (distributedCacheValue != null)
-            {
-                // "Download" value to local cache
-                _inMemoryCacheProvider.Set(cacheKey, distributedCacheValue);
-                return distributedCacheValue;
-            }
-
-            // Cache not found in any of the cache providers so obtain it using the given provider function
-            var cacheValueToSet = valueProviderFunc.Invoke();
-
-            // Fill in cache
-            _inMemoryCacheProvider.Set(cacheKey, cacheValueToSet);
-            _distributedCacheProvider.Set(cacheKey, cacheValueToSet);
-
-            // Return the obtained value 
-            return cacheValueToSet;
+            // Delete from distributed cache if present
+            _distributedCacheProvider.Remove(cacheKey);
         }
 
         /// <summary>
@@ -130,19 +143,6 @@ namespace ForexMiner.Heimdallr.Common.Caching.Services
 
             // Delete from distributed cache if present
             await _distributedCacheProvider.RemoveAsync(cacheKey, cancellationToken);
-        }
-
-        /// <summary>
-        /// Async invalidate a cache value
-        /// </summary>
-        /// <param name="cacheKey">The cache key to invalidate</param>
-        public void InvalidateValue(string cacheKey)
-        {
-            // Delete from local cache if present
-            _inMemoryCacheProvider.Remove(cacheKey);
-
-            // Delete from distributed cache if present
-            _distributedCacheProvider.Remove(cacheKey);
         }
     }
 }
