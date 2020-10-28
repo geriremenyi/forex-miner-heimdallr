@@ -11,10 +11,12 @@ namespace ForexMiner.Heimdallr.Common.Extensions
     using ForexMiner.Heimdallr.Common.Caching.Providers.InMemory;
     using ForexMiner.Heimdallr.Common.Caching.Services;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Extensions for cache configuration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class CacheConfigurationExtensions
     {
         /// <summary>

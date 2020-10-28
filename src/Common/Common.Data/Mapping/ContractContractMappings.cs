@@ -8,12 +8,13 @@
 namespace ForexMiner.Heimdallr.Common.Data.Mapping
 {
     using AutoMapper;
-    using Database = Database.Models;
     using Contracts = Contracts;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Contract types to other contract types
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ContractContractMappings : Profile
     {
         /// <summary>

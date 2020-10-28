@@ -11,10 +11,12 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Models.Trade
     using ForexMiner.Heimdallr.Common.Data.Contracts.Trade;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Representation of a trade signal in the DB
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class TradeSignal
     {
         /// <summary>

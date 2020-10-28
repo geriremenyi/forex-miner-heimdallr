@@ -20,17 +20,17 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.User
         /// <summary>
         /// Email to login with
         /// </summary>
-        [DataMember]
-        [Required]
+        [DataMember(Name = "email")]
         [DataType(DataType.EmailAddress)]
+        [Required]
         public string Email { get; set; }
 
         /// <summary>
         /// Password to login with
         /// </summary>
-        [DataMember]
-        [Required]
+        [DataMember(Name = "password")]
         [DataType(DataType.Password)]
+        [Required]
         public string Password { get; set; }
     }
 }

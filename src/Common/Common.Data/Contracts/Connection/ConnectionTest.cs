@@ -8,11 +8,13 @@
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Connection
 {
     using ForexMiner.Heimdallr.Common.Data.Database.Models.Connection;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 
     /// <summary>
     /// Representation of a connection to create
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [DataContract]
     public class ConnectionTest
     {

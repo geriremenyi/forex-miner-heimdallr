@@ -10,10 +10,12 @@ namespace ForexMiner.Heimdallr.Common.Data.Mapping
     using AutoMapper;
     using Database = Database.Models;
     using Contracts = Contracts;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Database types to Contract types
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class DatabaseContractMappings : Profile
     {
         /// <summary>

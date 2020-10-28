@@ -10,11 +10,13 @@ namespace ForexMiner.Heimdallr.Common.Extensions
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
 
     /// <summary>
     /// Extensions for JWT token authentication configuration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class JwtAuthenticationConfiguration
     {
         /// <summary>

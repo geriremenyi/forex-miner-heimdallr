@@ -9,14 +9,14 @@ namespace ForexMiner.Heimdallr.Common.Extensions
 {
     using Hellang.Middleware.ProblemDetails;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Extensions for problem details configuration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class ProblemDetailsConfiguration
     {
         /// <summary>
