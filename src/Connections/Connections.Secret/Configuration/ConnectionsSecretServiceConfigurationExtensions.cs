@@ -29,8 +29,8 @@ namespace ForexMiner.Heimdallr.Connections.Secret.Configuration
         {
             if (isDevelopmentEnvironment)
             {
-                // DEV 
-                // workaround as there is no chance to run a local keyvaul emulator as there is no such thing
+                // DEVELOPMENT
+                // workaround as there is no chance to run a local KeyVault emulator as there is no such thing
                 services.AddCachingService(redisConnectionString);
                 services.AddScoped<IConnectionsSecretService, DevelopmentConnectionsSecretService>();
             }

@@ -16,6 +16,7 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Configuration
     using System;
     using Microsoft.Extensions.Hosting;
     using AutoMapper;
+    using ForexMiner.Heimdallr.Common.Data.Mapping;
 
     /// <summary>
     /// Extension methods for connections worker service configuration
@@ -40,7 +41,7 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Configuration
             services.AddDatabase(configuration["SqlServer-ConnectionString"]);
 
             // Auto mapping
-            services.AddAutoMapper(typeof(ConnectionsWorkerConfigurationExtensions));
+            services.AddAutoMapper(typeof(ContractContractMappings), typeof(DatabaseContractMappings), typeof(OandaContractMappings));
 
             // Connections secret service
             services.AddConnectionsSecretServices(environment.IsDevelopment(), configuration["KeyVault-Uri"], configuration["RedisCache-ConnectionString"]);
