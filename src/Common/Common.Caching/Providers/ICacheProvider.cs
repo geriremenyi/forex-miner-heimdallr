@@ -15,6 +15,13 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers
     /// </summary>
     public interface ICacheProvider
     {
+        /// <summary>
+        /// Get cache value
+        /// </summary>
+        /// <typeparam name="T">Type of the cache value</typeparam>
+        /// <param name="key">Cache key</param>
+        /// <returns>Value of the cache</returns>
+        public T Get<T>(string key);
 
         /// <summary>
         /// Async get cache value
@@ -26,12 +33,12 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers
         public Task<T> GetAsync<T>(string key, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Get cache value
+        /// Set cache
         /// </summary>
         /// <typeparam name="T">Type of the cache value</typeparam>
         /// <param name="key">Cache key</param>
-        /// <returns>Value of the cache</returns>
-        public T Get<T>(string key);
+        /// <param name="value">Cache value</param>
+        public void Set<T>(string key, T value);
 
         /// <summary>
         /// Async set cache value
@@ -43,24 +50,16 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers
         public Task SetAsync<T>(string key, T value, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Set cache
+        /// Remove cache value
         /// </summary>
-        /// <typeparam name="T">Type of the cache value</typeparam>
         /// <param name="key">Cache key</param>
-        /// <param name="value">Cache value</param>
-        public void Set<T>(string key, T value);
+        public void Remove(string key);
 
         /// <summary>
         /// Async remove cache value
         /// </summary>
         /// <param name="key">Cache key</param>
         /// <param name="cancellationToken">The cancellation token</param>
-        public Task RemoveAsync(string key, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Remove cache value
-        /// </summary>
-        /// <param name="key">Cache key</param>
-        public void Remove(string key);
+        public Task RemoveAsync(string key, CancellationToken cancellationToken = default);
     }
 }

@@ -45,6 +45,17 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.InMemory
         }
 
         /// <summary>
+        /// Get cache value
+        /// </summary>
+        /// <typeparam name="T">Type of the cache value</typeparam>
+        /// <param name="key">Cache key</param>
+        /// <returns>Value of the cache</returns>
+        public T Get<T>(string key)
+        {
+            return _innerCache.Get<T>(key);
+        }
+
+        /// <summary>
         /// Async get cache value
         /// </summary>
         /// <typeparam name="T">Type of the cache value</typeparam>
@@ -57,14 +68,14 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.InMemory
         }
 
         /// <summary>
-        /// Get cache value
+        /// Set cache
         /// </summary>
         /// <typeparam name="T">Type of the cache value</typeparam>
         /// <param name="key">Cache key</param>
-        /// <returns>Value of the cache</returns>
-        public T Get<T>(string key)
+        /// <param name="value">Cache value</param>
+        public void Set<T>(string key, T value)
         {
-            return _innerCache.Get<T>(key);
+            _innerCache.Set(key, value, _innerCacheOptions);
         }
 
         /// <summary>
@@ -81,14 +92,12 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.InMemory
         }
 
         /// <summary>
-        /// Set cache
+        /// Remove cache value
         /// </summary>
-        /// <typeparam name="T">Type of the cache value</typeparam>
         /// <param name="key">Cache key</param>
-        /// <param name="value">Cache value</param>
-        public void Set<T>(string key, T value)
+        public void Remove(string key)
         {
-            _innerCache.Set(key, value, _innerCacheOptions);
+            _innerCache.Remove(key);
         }
 
         /// <summary>
@@ -100,15 +109,6 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.InMemory
         {
             _innerCache.Remove(key);
             return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Remove cache value
-        /// </summary>
-        /// <param name="key">Cache key</param>
-        public void Remove(string key)
-        {
-            _innerCache.Remove(key);
         }
     }
 }
