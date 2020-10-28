@@ -10,10 +10,12 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Models.Connection
     using ForexMiner.Heimdallr.Common.Data.Contracts.Connection;
     using ForexMiner.Heimdallr.Common.Data.Database.Models.User;
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Representation of a connections
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Connection
     {
         /// <summary>

@@ -7,14 +7,14 @@
 
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Connection
 {
-    using ForexMiner.Heimdallr.Common.Data.Database.Models.Connection;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 
     /// <summary>
     /// Representation of a connection to create
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [DataContract]
     public class ConnectionTestResults
     {
@@ -27,6 +27,7 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.Connection
         /// <summary>
         /// Available account IDs under the connection
         /// </summary>
+        [DataMember(Name = "accountIds")]
         public IEnumerable<string> AccountIds { get; set; }
     }
 }

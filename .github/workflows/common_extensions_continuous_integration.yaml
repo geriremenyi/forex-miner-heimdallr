@@ -1,0 +1,17 @@
+name: Common.Extensions Continuous Integration
+on: [pull_request]
+jobs:
+  build:
+    name: Build Common.Extensions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build
+        run: dotnet build ./src/Common/Common.Extensions/Common.Extensions.csproj

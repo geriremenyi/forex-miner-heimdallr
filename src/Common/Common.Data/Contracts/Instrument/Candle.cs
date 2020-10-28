@@ -8,11 +8,13 @@
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Instrument
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 
     /// <summary>
     /// Representation of a japanese candle with it's time and volume
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [DataContract]
     public class Candle
     {

@@ -12,10 +12,12 @@ namespace ForexMiner.Heimdallr.Common.Data.Mapping
     using AutoMapper.Extensions.EnumMapping;
     using Oanda = GeriRemenyi.Oanda.V20.Client.Model;
     using Contracts = Contracts;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Oanda types to Contract types
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class OandaContractMappings : Profile
     {
         /// <summary>

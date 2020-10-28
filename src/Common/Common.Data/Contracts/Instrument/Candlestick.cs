@@ -5,13 +5,15 @@
 // </copyright>
 //----------------------------------------------------------------------------------------
 
-using System.Runtime.Serialization;
-
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Instrument
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// The usual OHLC candlestick representation
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [DataContract]
     public class Candlestick
     {

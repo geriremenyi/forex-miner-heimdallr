@@ -14,6 +14,7 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.Instrument
     /// Available instrument names in the application
     /// Currently only the seven major currency pairs are supported
     /// </summary>
+    [DataContract]
     public enum InstrumentName
     {
         /// <summary>

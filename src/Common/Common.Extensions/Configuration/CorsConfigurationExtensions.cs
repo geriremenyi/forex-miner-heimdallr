@@ -9,10 +9,12 @@ namespace ForexMiner.Heimdallr.Common.Extensions
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Extensions for CORS configuration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class CorsConfigurationExtensions
     {
         /// <summary>

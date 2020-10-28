@@ -12,14 +12,14 @@ namespace ForexMiner.Heimdallr.Common.Extensions
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Extensions for database configuration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class DatabaseConfigurationExtensions
     {
         /// <summary>

@@ -21,28 +21,28 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.User
         /// <summary>
         /// Email of the user to update to
         /// </summary>
-        [DataMember]
+        [DataMember(Name = "email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         /// <summary>
         /// First name of the user to update to
         /// </summary>
-        [DataMember]
+        [DataMember(Name = "firstName")]
         [MaxLength(50)]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Last name of the user to upate to
         /// </summary>
-        [DataMember]
+        [DataMember(Name = "lastName")]
         [MaxLength(50)]
         public string LastName { get; set; }
 
         /// <summary>
         /// Password of the user to update to
         /// </summary>
-        [DataMember]
+        [DataMember(Name = "password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

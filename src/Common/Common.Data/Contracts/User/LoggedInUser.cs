@@ -8,6 +8,7 @@
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.User
 {
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Representation of a user which is logged in
@@ -15,11 +16,13 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.User
     /// Basically a database user without credential info but with the authentication token
     /// </summary>
     [ExcludeFromCodeCoverage]
+    [DataContract]
     public class LoggedInUser : User
     {
         /// <summary>
         /// JWT token to autehnticate with
         /// </summary>
+        [DataMember(Name = "token")]
         public string Token { get; set; }
     }
 }

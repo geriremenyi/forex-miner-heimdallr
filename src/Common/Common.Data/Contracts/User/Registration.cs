@@ -14,40 +14,40 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.User
     /// <summary>
     /// Representation of a registration
     /// </summary>
-    [DataContract]
     [ExcludeFromCodeCoverage]
+    [DataContract]
     public class Registration
     {
         /// <summary>
         /// Email address to register with
         /// </summary>
-        [DataMember]
-        [Required]
+        [DataMember(Name = "email")]
         [DataType(DataType.EmailAddress)]
+        [Required]
         public string Email { get; set; }
 
         /// <summary>
         /// First name ti register with
         /// </summary>
-        [DataMember]
-        [Required]
+        [DataMember(Name = "firstName")]
         [MaxLength(50)]
+        [Required]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Last name to register with
         /// </summary>
-        [DataMember]
-        [Required]
+        [DataMember(Name = "lastName")]
         [MaxLength(50)]
+        [Required]
         public string LastName { get; set; }
 
         /// <summary>
         /// Password to register with
         /// </summary>
-        [DataMember]
-        [Required]
+        [DataMember(Name = "password")]
         [DataType(DataType.Password)]
+        [Required]
         public string Password { get; set; }
     }
 }

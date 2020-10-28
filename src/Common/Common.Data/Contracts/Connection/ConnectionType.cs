@@ -18,13 +18,13 @@ namespace ForexMiner.Heimdallr.Common.Data.Contracts.Connection
         /// <summary>
         /// The connection is connecting to a demo/practice environment
         /// </summary>
-        [DataMember(Name = "demo")]
+        [EnumMember(Value = "demo")]
         Demo,
 
         /// <summary>
         /// The connection is connecting to a live trading environment
         /// </summary>
-        [DataMember(Name = "live")]
+        [EnumMember(Value = "live")]
         Live
     }
 }
