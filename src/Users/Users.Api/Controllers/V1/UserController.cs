@@ -17,7 +17,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Controllers.V1
     using System.Security.Claims;
     using ForexMiner.Heimdallr.Common.Data.Exceptions;
     using System.Net;
-    using Role = Heimdallr.Common.Data.Database.Models.User.Role;
+    using Role = Common.Data.Database.Models.User.Role;
 
     /// <summary>
     /// API controller for user endpoints
@@ -76,7 +76,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Controllers.V1
         public User Me()
         {
             // Find out user id
-            var userIdClaim = User.Claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault();
+            var userIdClaim = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
 
             // Get user from service if validations are passed
             return _userService.GetUserById(Guid.Parse(userIdClaim.Value));
@@ -130,7 +130,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Controllers.V1
         /// <summary>
         /// Get all users endpoint
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The list of all users</returns>
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public IEnumerable<User> GetAllUsers()
@@ -145,7 +145,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Controllers.V1
         private void CheckAuthorization(Guid userId, bool bypassForAdmin = true)
         {
             // Claim validation
-            var userIdClaim = User.Claims.Where(claim => claim.Type == ClaimTypes.Name).FirstOrDefault();
+            var userIdClaim = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
             var shouldBypass = User.Claims.Where(claim => claim.Type == ClaimTypes.Role).Any(role => role.Value == Role.Admin.ToString()) && bypassForAdmin;
             if (userIdClaim == null)
             {
