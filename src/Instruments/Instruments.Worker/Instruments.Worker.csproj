@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-Instruments.Worker-A19A7C62-1D64-4B67-ADE5-9C2D0D10B843</UserSecretsId>
+    <AssemblyName>ForexMiner.Heimdallr.Instruments.Worker</AssemblyName>
+    <RootNamespace>ForexMiner.Heimdallr.Instruments.Worker</RootNamespace>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="1.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="GeriRemenyi.Oanda.V20.Sdk" Version="0.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.Data\Common.Data.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Extensions\Common.Extensions.csproj" />
+    <ProjectReference Include="..\Instruments.Storage\Instruments.Storage.csproj" />
+  </ItemGroup>
+</Project>

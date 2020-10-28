@@ -1,0 +1,3 @@
+# Do not push the development appsettings
+# as it might contain non local-only secrets
+appsettings.Development.json

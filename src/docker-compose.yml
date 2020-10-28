@@ -1,30 +1,106 @@
 version: '3.4'
 
 services:
-    sqlserver:
-        image: mcr.microsoft.com/mssql/server
-        environment:
-            SA_PASSWORD: pfw3KXpLkDnE52ys
-            ACCEPT_EULA: Y
-    redis:
-        image: redis:alpine
-        command: redis-server --requirepass JHG35TNgRSt6j3CB
-        ports:
-            - 6379:6379
-        volumes:
-            - $PWD/redis-data:/var/lib/redis
-            - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
-        environment:
-            - REDIS_REPLICATION_MODE=master
-    #forexminer.heimdallr.configurationmanager:
-    #    image: ${DOCKER_REGISTRY-}forexminer.heimdallr.configurationmanager
-    #    ports:
-    #        - 32010:80
-    #    build:
-    #        context: .
-    #        dockerfile: ConfigurationManager/Dockerfile
-    forex-miner-heimdallr-user-api:
-       image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-user-api
-       build:
-            context: .
-            dockerfile: /Dockerfile
+  sql-server:
+    container_name: sql-server
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: pfw3KXpLkDnE52ys
+      ACCEPT_EULA: Y
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P pfw3KXpLkDnE52ys -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    ports:
+      - 1433:1433
+  redis-cache:
+    container_name: redis-cache
+    image: redis:alpine
+    command: redis-server --requirepass JHG35TNgRSt6j3CB
+    ports:
+      - 6379:6379
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+  azure-storage-account:
+    container_name: azure-storage-account
+    image: mcr.microsoft.com/azure-storage/azurite
+    command: azurite-blob --blobHost 0.0.0.0 --blobPort 10000
+    ports:
+      - 10000:10000
+  forex-miner-thor:
+    container_name: forex-miner-thor
+    image: ghcr.io/geriremenyi/forex-miner-thor
+    ports:
+      - 31001:31001
+    volumes:
+      - $PWD/historical-data:/app/data
+  forex-miner-heimdallr-users-api:
+    container_name: forex-miner-heimdallr-users-api
+    image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-users-api
+    build:
+      context: .
+      dockerfile: Users/Users.Api/Dockerfile
+    ports:
+      - 32001:80
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - "sql-server"
+  forex-miner-heimdallr-instruments-api:
+    container_name: forex-miner-heimdallr-instruments-api
+    image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-instruments-api
+    build:
+      context: .
+      dockerfile: Instruments/Instruments.Api/Dockerfile
+    ports:
+      - 32002:80
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - "sql-server"
+      - "azure-storage-account"
+  forex-miner-heimdallr-connections-api:
+    container_name: forex-miner-heimdallr-connections-api
+    image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-connections-api
+    build:
+      context: .
+      dockerfile: Connections/Connections.Api/Dockerfile
+    ports:
+      - 32003:80
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - "sql-server"
+  forex-miner-heimdallr-instruments-worker:
+    container_name: forex-miner-heimdallr-instruments-worker
+    image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-instruments-worker
+    build:
+      context: .
+      dockerfile: Instruments/Instruments.Worker/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - "sql-server"
+      - "azure-storage-account"
+      - "forex-miner-thor"
+  forex-miner-heimdallr-connections-worker:
+    container_name: forex-miner-heimdallr-connections-worker
+    image: ${DOCKER_REGISTRY-}forex-miner-heimdallr-connections-worker
+    build:
+      context: .
+      dockerfile: Connections/Connections.Worker/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - "sql-server"
+      - "forex-miner-thor"

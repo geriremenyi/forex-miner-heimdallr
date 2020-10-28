@@ -1,49 +1,54 @@
+//----------------------------------------------------------------------------------------
+// <copyright file="Startup.cs" company="geriremenyi.com">
+//     Author: Gergely Reményi
+//     Copyright (c) geriremenyi.com. All rights reserved.
+// </copyright>
+//----------------------------------------------------------------------------------------
+
 namespace ForexMiner.Heimdallr.Users.Api
 {
+    using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using ForexMiner.Heimdallr.Users.Api.Configuration;
-    using ForexMiner.Heimdallr.Users.Api.Database;
-    using ForexMiner.Heimdallr.Common.ServiceConfiguration;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Text.Json.Serialization;
 
     public class Startup
     {
+        /// <summary>
+        /// Hosting environment
+        /// </summary>
+        private readonly IWebHostEnvironment _environment;
+
+        /// <summary>
+        /// Configuration object
+        /// </summary>
         private readonly IConfiguration _configuration;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
+            _environment = environment;
             _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             // Routing
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddApiVersioning();
 
-            // UserManager services and all dependencies
-            services.AddUserManagerServices(_configuration);
-
-            // Exception handling
-            services.AddProblemDetailsExceptionHandling();
-
-            // JWT authentication
-            services.AddJwtAuthentication(_configuration["JWT:IssuerSigningKey"]);
+            // All utility- and local services
+            services.AddUsersApiServices(_configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UsersApiDbContext userManagerDbContext)
+        public void Configure(IApplicationBuilder app, ForexMinerHeimdallrDbContext dbContext, IEntitySeedService seedService)
         {
-            // Custom middlewares for UserManager
-            userManagerDbContext.Database.Migrate();
+            // Custom 
+            app.UseUsersApiServices(_environment, dbContext, seedService);
 
-            // Exception handling
-            app.UseProblemDetails(env);
-
-            // Routing and authentication
-            app.UseHttpsRedirection();
+            // System
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
