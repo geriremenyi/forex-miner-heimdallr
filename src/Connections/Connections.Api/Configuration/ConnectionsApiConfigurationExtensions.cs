@@ -17,6 +17,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Configuration
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
     using AutoMapper;
+    using ForexMiner.Heimdallr.Common.Data.Mapping;
 
     /// <summary>
     /// Extension class for service configuration
@@ -44,7 +45,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Configuration
             services.AddDatabase(configuration["SqlServer-ConnectionString"]);
 
             // Auto mapping
-            services.AddAutoMapper(typeof(ConnectionsApiConfigurationExtensions));
+            services.AddAutoMapper(typeof(ContractContractMappings), typeof(DatabaseContractMappings), typeof(OandaContractMappings));
 
             // Connections secret service
             services.AddConnectionsSecretServices(environment.IsDevelopment(), configuration["KeyVault-Uri"], configuration["RedisCache-ConnectionString"]);

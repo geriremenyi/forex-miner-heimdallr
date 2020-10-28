@@ -16,6 +16,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Configuration
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
+    using ForexMiner.Heimdallr.Common.Data.Mapping;
 
     /// <summary>
     /// Extension class for service configuration
@@ -42,7 +43,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Configuration
             services.AddDatabase(configuration["SqlServer-ConnectionString"]);
 
             // Auto mapper
-            services.AddAutoMapper(typeof(UsersApiConfigurationExtensions));
+            services.AddAutoMapper(typeof(ContractContractMappings), typeof(DatabaseContractMappings), typeof(OandaContractMappings));
 
             // Local services
             services.AddScoped<IUserService, UserService>();

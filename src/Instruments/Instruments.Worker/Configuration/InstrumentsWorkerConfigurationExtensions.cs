@@ -8,6 +8,7 @@
 namespace ForexMiner.Heimdallr.Instruments.Worker.Configuration
 {
     using AutoMapper;
+    using ForexMiner.Heimdallr.Common.Data.Mapping;
     using ForexMiner.Heimdallr.Common.Extensions;
     using ForexMiner.Heimdallr.Instruments.Configuration;
     using ForexMiner.Heimdallr.Instruments.Worker.Services;
@@ -42,7 +43,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Configuration
             services.AddDatabase(configuration["SqlServer-ConnectionString"]);
 
             // Auto mapper
-            services.AddAutoMapper(typeof(InstrumentsWorkerConfigurationExtensions));
+            services.AddAutoMapper(typeof(ContractContractMappings), typeof(DatabaseContractMappings), typeof(OandaContractMappings));
 
             // Instrument worker services
             services.AddScoped<IInstrumentHistoryService, InstrumentHistoryService>();

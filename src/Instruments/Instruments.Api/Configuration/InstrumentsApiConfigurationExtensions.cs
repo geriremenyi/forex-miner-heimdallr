@@ -10,6 +10,7 @@
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using Microsoft.Extensions.Hosting;
     using AutoMapper;
+    using ForexMiner.Heimdallr.Common.Data.Mapping;
 
     public static class InstrumentsApiConfigurationExtensions {
         public static void AddInstrumentsApiServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
@@ -27,7 +28,7 @@
             services.AddDatabase(configuration["SqlServer-ConnectionString"]);
 
             // Auto mapping
-            services.AddAutoMapper(typeof(InstrumentsApiConfigurationExtensions));
+            services.AddAutoMapper(typeof(ContractContractMappings), typeof(DatabaseContractMappings), typeof(OandaContractMappings));
 
             // Local services
             services.AddScoped<IInstrumentService, InstrumentService>();

@@ -7,7 +7,6 @@
 
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Instrument
 {
-    using GeriRemenyi.Oanda.V20.Client.Model;
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
