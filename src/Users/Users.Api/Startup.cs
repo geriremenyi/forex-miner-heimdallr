@@ -13,8 +13,13 @@ namespace ForexMiner.Heimdallr.Users.Api
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text.Json.Serialization;
 
+    /// <summary>
+    /// Startup
+    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         /// <summary>

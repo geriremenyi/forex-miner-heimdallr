@@ -5,16 +5,17 @@
 // </copyright>
 //----------------------------------------------------------------------------------------
 
-
 namespace ForexMiner.Heimdallr.Users.Api
 {
     using ForexMiner.Heimdallr.Common.Extensions.Configuration;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Program
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Program
     {
         /// <summary>

@@ -29,7 +29,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Services
         /// </summary>
         /// <param name="registration">The registration details, the user to create</param>
         /// <returns>The registered user</returns>
-        public User Register(Registration registration, Role? role = null);
+        public User Register(Registration registration, Role role = Role.Trader);
 
 
         /// <summary>

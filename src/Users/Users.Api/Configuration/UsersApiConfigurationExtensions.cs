@@ -17,10 +17,12 @@ namespace ForexMiner.Heimdallr.Users.Api.Configuration
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
     using ForexMiner.Heimdallr.Common.Data.Mapping;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Extension class for service configuration
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class UsersApiConfigurationExtensions
     {
         /// <summary>

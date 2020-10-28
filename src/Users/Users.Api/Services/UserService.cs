@@ -14,10 +14,9 @@ namespace ForexMiner.Heimdallr.Users.Api.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using ForexMiner.Heimdallr.Users.Api.Common;
     using Microsoft.Extensions.Configuration;
-    using Database = Heimdallr.Common.Data.Database.Models.User;
-    using Contracts = Heimdallr.Common.Data.Contracts.User;
+    using Database = Common.Data.Database.Models.User;
+    using Contracts = Common.Data.Contracts.User;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
@@ -64,13 +63,13 @@ namespace ForexMiner.Heimdallr.Users.Api.Services
         {
             // Check user if is present in the DB
             var user = GetUserFromDbByEmail(userLogin.Email);
-            if (user == null || user.IsPasswordCorrect(userLogin.Password))
+            if (user == null || !user.IsPasswordCorrect(userLogin.Password))
             {
                 throw new ProblemDetailsException(HttpStatusCode.NotFound, "Invalid email address or password");
             }
 
             // Generate and add JWT token to the logged in user object
-            var loggedInUser = _mapper.Map<Database.User, Contracts.LoggedInUser>(user);
+            var loggedInUser = _mapper.Map<Contracts.LoggedInUser>(user);
             loggedInUser.AddNewJwtToken(_configuration["JWT-IssuerSigningKey"]);
 
             return loggedInUser;
@@ -81,7 +80,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Services
         /// </summary>
         /// <param name="registration">The registration details, the user to create</param>
         /// <returns>The registered user</returns>
-        public Contracts.User Register(Contracts.Registration registration, Database.Role? role = null)
+        public Contracts.User Register(Contracts.Registration registration, Database.Role role = Database.Role.Trader)
         {
             // Check if email address is not taken already
             var userWithSameEmail = GetUserFromDbByEmail(registration.Email);
@@ -94,7 +93,7 @@ namespace ForexMiner.Heimdallr.Users.Api.Services
             var user = _mapper.Map<Contracts.Registration, Database.User>(registration);
 
             // Add role
-            user.Role = role ?? Database.Role.Trader;
+            user.Role = role;
 
             // Secure password with salt
             user.UpdatePassword(registration.Password);

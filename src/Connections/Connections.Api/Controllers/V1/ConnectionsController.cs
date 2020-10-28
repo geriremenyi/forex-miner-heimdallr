@@ -92,7 +92,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Controllers.V1
         /// <returns></returns>
         private Guid WhoAmI()
         {
-            return Guid.Parse(User.Claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault().Value);
+            return Guid.Parse(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value);
         }
     }
 }

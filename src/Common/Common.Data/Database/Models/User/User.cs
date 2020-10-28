@@ -8,11 +8,14 @@
 namespace ForexMiner.Heimdallr.Common.Data.Database.Models.User
 {
     using ForexMiner.Heimdallr.Common.Data.Database.Models.Connection;
+    using Microsoft.AspNetCore.Cryptography.KeyDerivation;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
 
     /// <summary>
     /// Representation of a user in the database
@@ -83,6 +86,54 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Models.User
         public User()
         {
             Connections = new List<Connection>();
+        }
+
+        /// <summary>
+        /// Update the password via regenerating salt and hashing it with the plain text password
+        /// </summary>
+        /// <param name="user">User to update the password for</param>
+        /// <param name="plainPassword">New plan text password</param>
+        public void UpdatePassword(string plainPassword)
+        {
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            var password = HashPassword(plainPassword, salt);
+
+            PasswordSalt = Convert.ToBase64String(salt);
+            PasswordHash = password;
+        }
+
+        /// <summary>
+        /// Check the hashed password agains the plain text password via hashing it with the salt
+        /// </summary>
+        /// <param name="user">The user to check the password for</param>
+        /// <param name="plainPassword">The plain text password</param>
+        /// <returns></returns>
+        public bool IsPasswordCorrect(string plainPassword)
+        {
+            var hashedPassword = HashPassword(plainPassword, Convert.FromBase64String(PasswordSalt));
+
+            return hashedPassword.Equals(PasswordHash);
+        }
+
+        /// <summary>
+        /// Hash the plain text password with the given salt
+        /// </summary>
+        /// <param name="plainPassword"></param>
+        /// <param name="salt"></param>
+        /// <returns>The hashed password</returns>
+        public string HashPassword(string plainPassword, byte[] salt)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+               password: plainPassword,
+               salt: salt,
+               prf: KeyDerivationPrf.HMACSHA1,
+               iterationCount: 10000,
+               numBytesRequested: 256 / 8)
+            );
         }
     }
 }
