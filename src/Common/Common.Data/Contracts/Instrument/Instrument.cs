@@ -1,33 +1,36 @@
 ﻿//----------------------------------------------------------------------------------------
-// <copyright file="Instrument.cs" company="geriremenyi.com">
+// <copyright file="InstrumentCreation.cs" company="geriremenyi.com">
 //     Author: Gergely Reményi
 //     Copyright (c) geriremenyi.com. All rights reserved.
 // </copyright>
 //----------------------------------------------------------------------------------------
+
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Instrument
 {
-    using GeriRemenyi.Oanda.V20.Client.Model;
-    using System.Diagnostics.CodeAnalysis;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// Instrument data transfer object
+    /// Representation of an instrument
     /// </summary>
-    [ExcludeFromCodeCoverage]
     public class Instrument
     {
         /// <summary>
         /// Name of the instrument
         /// </summary>
         public InstrumentName Name { get; set; }
-        
-        /// <summary>
-        /// Is the instrument tradeable through the applicatiomn
-        /// </summary>
-        public bool IsTradeable { get; set; }
 
         /// <summary>
-        /// How many times were the instrument traded through the application
+        /// Instrument's granularities
         /// </summary>
-        public int TradedCounter { get; set; }
+        public ICollection<InstrumentGranularity> Granularities { get; set; }
+
+        /// <summary>
+        /// Instrument constructor
+        /// Initializes and empty granularities list
+        /// </summary>
+        public Instrument()
+        {
+            Granularities = new List<InstrumentGranularity>();
+        }
     }
 }

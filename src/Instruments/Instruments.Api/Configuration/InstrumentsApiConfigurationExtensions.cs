@@ -1,7 +1,6 @@
 ﻿namespace ForexMiner.Heimdallr.Instruments.Api.Configuration
 {
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.EntityFrameworkCore;
     using ForexMiner.Heimdallr.Instruments.Api.Services;
     using ForexMiner.Heimdallr.Instruments.Configuration;
     using Microsoft.Extensions.Configuration;
@@ -10,6 +9,7 @@
     using Microsoft.AspNetCore.Hosting;
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using Microsoft.Extensions.Hosting;
+    using AutoMapper;
 
     public static class InstrumentsApiConfigurationExtensions {
         public static void AddInstrumentsApiServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
@@ -21,16 +21,19 @@
             services.AddProblemDetails();
 
             // JWT token
-            services.AddJwtAuthentication(configuration["Jwt:IssuerSigningKey"]);
+            services.AddJwtAuthentication(configuration["Jwt-IssuerSigningKey"]);
 
             // Database
-            services.AddDatabase(environment.IsDevelopment(), configuration["SqlServer:ConnectionString"], configuration["RedisCache:ConnectionString"]);
+            services.AddDatabase(configuration["SqlServer-ConnectionString"]);
+
+            // Auto mapping
+            services.AddAutoMapper(typeof(InstrumentsApiConfigurationExtensions));
 
             // Local services
             services.AddScoped<IInstrumentService, InstrumentService>();
 
             // Storage service
-            services.AddInstrumentsStorageServices(configuration["StorageAccount:Url"]);
+            services.AddInstrumentsStorageServices(configuration["StorageAccount-ConnectionString"]);
         }
 
         public static void UseInstrumentsApiServices(this IApplicationBuilder app, IWebHostEnvironment environment, ForexMinerHeimdallrDbContext dbContext)
@@ -40,9 +43,6 @@
 
             // ProblemDetails
             app.UseProblemDetails(environment.IsDevelopment());
-
-            // Database migration
-            dbContext.MigrateDatabase();
         }
     }
 }

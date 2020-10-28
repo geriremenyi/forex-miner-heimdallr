@@ -17,7 +17,7 @@ The repo's name is coming from the Norse mythology, in which [Heimdallr](https:/
 DB migration
 
 ```bash
-dotnet ef migrations add <MigrationName> -c ForexMiner.Heimdallr.Common.Data.Database.Context.ForexMinerHeimdallrDbContext -o Database\Migrations -s .\Users\Users.Api -p .\Common\Data
+dotnet ef migrations add Initial -c ForexMiner.Heimdallr.Common.Data.Database.Context.ForexMinerHeimdallrDbContext -p .\src\Common\Common.Data -o Database\Migrations -s .\src\Users\Users.Api 
 ```
 
 TBD

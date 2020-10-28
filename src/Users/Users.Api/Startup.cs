@@ -1,3 +1,10 @@
+//----------------------------------------------------------------------------------------
+// <copyright file="Startup.cs" company="geriremenyi.com">
+//     Author: Gergely Reményi
+//     Copyright (c) geriremenyi.com. All rights reserved.
+// </copyright>
+//----------------------------------------------------------------------------------------
+
 namespace ForexMiner.Heimdallr.Users.Api
 {
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
@@ -6,10 +13,18 @@ namespace ForexMiner.Heimdallr.Users.Api
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Text.Json.Serialization;
 
     public class Startup
     {
+        /// <summary>
+        /// Hosting environment
+        /// </summary>
         private readonly IWebHostEnvironment _environment;
+
+        /// <summary>
+        /// Configuration object
+        /// </summary>
         private readonly IConfiguration _configuration;
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
@@ -21,17 +36,17 @@ namespace ForexMiner.Heimdallr.Users.Api
         public void ConfigureServices(IServiceCollection services)
         {
             // Routing
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddApiVersioning();
 
             // All utility- and local services
-            services.AddUsersApiServices(_environment, _configuration);
+            services.AddUsersApiServices(_configuration);
         }
 
-        public void Configure(IApplicationBuilder app, ForexMinerHeimdallrDbContext dbContext)
+        public void Configure(IApplicationBuilder app, ForexMinerHeimdallrDbContext dbContext, IEntitySeedService seedService)
         {
             // Custom 
-            app.UseUsersApiServices(_environment, dbContext);
+            app.UseUsersApiServices(_environment, dbContext, seedService);
 
             // System
             app.UseRouting();

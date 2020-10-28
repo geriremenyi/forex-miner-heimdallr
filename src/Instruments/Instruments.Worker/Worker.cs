@@ -1,48 +1,96 @@
+//----------------------------------------------------------------------------------------
+// <copyright file="Worker.cs" company="geriremenyi.com">
+//     Author: Gergely Reményi
+//     Copyright (c) geriremenyi.com. All rights reserved.
+// </copyright>
+//----------------------------------------------------------------------------------------
+
 namespace ForexMiner.Heimdallr.Instruments.Worker
 {
     using System;
-    using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
-    using ForexMiner.Heimdallr.Instruments.Worker.Services.History;
+    using ForexMiner.Heimdallr.Instruments.Worker.Services;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
-    public class Worker : BackgroundService
+    /// <summary>
+    /// Instruments worker
+    /// </summary>
+    public class Worker : IHostedService, IDisposable
     {
-        private readonly IHistoryService _historyService;
+        /// <summary>
+        /// Scope factory
+        /// </summary>
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public Worker(IHistoryService historyService)
+
+        /// <summary>
+        /// Configuration object
+        /// </summary>
+        private readonly IConfiguration _configuration;
+
+        /// <summary>
+        /// Instruments worker timer
+        /// </summary>
+        private Timer _timer;
+
+        /// <summary>
+        /// Instruments worker constructor
+        /// Sets up the history service and configuration
+        /// </summary>
+        /// <param name="historyService"></param>
+        public Worker(IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
-            _historyService = historyService;
+            _scopeFactory = scopeFactory;
+            _configuration = configuration;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        /// <summary>
+        /// Start instruments worker
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>A complete task on start</returns>
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            var oneMinute = TimeSpan.FromMinutes(1);
-            var cycles = 1;
+            _timer = new Timer(
+                CheckInstrumentGranularitiesAndLoadData, 
+                null, 
+                TimeSpan.FromMinutes(int.Parse(_configuration["InstrumentsWorker-IntervalMin"])),
+                TimeSpan.FromMinutes(int.Parse(_configuration["InstrumentsWorker-IntervalMin"]))
+            );
+            return Task.CompletedTask;
+        }
 
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                // Starting a stopwatch
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
+        /// <summary>
+        /// Process newly addedd instrument granularities and it's data
+        /// </summary>
+        /// <param name="source">The starter object</param>
+        private async void CheckInstrumentGranularitiesAndLoadData(Object source)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var historyServive = scope.ServiceProvider.GetRequiredService<IInstrumentHistoryService>();
+             await historyServive.CheckInstrumentGranularitiesAndLoadData();
+        }
 
-                // Every hour check and fill data for 
-                // all instruments until yesterday
-                if (cycles == 1) 
-                {
-                    _ = _historyService.CheckAndFillUntilYesterday();
-                    cycles = 1;
-                }
+        /// <summary>
+        /// Stop instruments worker processing
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>A completed task</returns>
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _timer?.Change(Timeout.Infinite, 0);
+            return Task.CompletedTask;
+        }
 
-                // Every minute check and fill data for today
-                //_ = _historyService.CheckAndFillToday();
-
-                // Stopping the stopwatch and waiting till 1 minute expires
-                // including the latest execution time
-                stopwatch.Stop();
-                await Task.Delay(oneMinute.Add(-1 * stopwatch.Elapsed), stoppingToken);
-            }
+        /// <summary>
+        /// Dispose instruments worker and it's timer
+        /// </summary>
+        public void Dispose()
+        {
+            _timer?.Dispose();
         }
     }
 }

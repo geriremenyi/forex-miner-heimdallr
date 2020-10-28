@@ -5,6 +5,8 @@
 // </copyright>
 //----------------------------------------------------------------------------------------
 
+using System.Runtime.Serialization;
+
 namespace ForexMiner.Heimdallr.Common.Data.Contracts.Trade
 {
     /// <summary>

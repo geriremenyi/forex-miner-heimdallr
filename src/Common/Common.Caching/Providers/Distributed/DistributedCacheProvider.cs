@@ -51,7 +51,8 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.Distributed
         /// <returns>Value of the cache</returns>
         public async Task<T> GetAsync<T>(string key, CancellationToken cancellationToken)
         {
-            return JsonSerializer.Deserialize<T>(await _innerCache.GetAsync(key, cancellationToken));
+            var cacheValue = await _innerCache.GetAsync(key, cancellationToken);
+            return cacheValue == null ? default : JsonSerializer.Deserialize<T>(cacheValue);
         }
 
         /// <summary>
@@ -62,7 +63,8 @@ namespace ForexMiner.Heimdallr.Common.Caching.Providers.Distributed
         /// <returns>Value of the cache</returns>
         public T Get<T>(string key)
         {
-            return JsonSerializer.Deserialize<T>(_innerCache.Get(key));
+            var cacheValue = _innerCache.Get(key);
+            return cacheValue == null ? default : JsonSerializer.Deserialize<T>(cacheValue);
         }
 
         /// <summary>

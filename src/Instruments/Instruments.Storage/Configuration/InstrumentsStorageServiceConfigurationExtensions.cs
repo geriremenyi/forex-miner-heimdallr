@@ -12,7 +12,7 @@
             services.AddAzureClients(builder => builder.AddBlobServiceClient(storageUrl));
 
             // Instrument service
-            services.AddSingleton<IInstrumentStorageService, InstrumentStorageService>();
+            services.AddScoped<IInstrumentStorageService, InstrumentStorageService>();
         }
     }
 }

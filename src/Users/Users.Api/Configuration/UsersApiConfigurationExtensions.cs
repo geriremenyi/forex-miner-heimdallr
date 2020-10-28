@@ -1,4 +1,11 @@
-﻿namespace ForexMiner.Heimdallr.Users.Api.Configuration
+﻿//----------------------------------------------------------------------------------------
+// <copyright file="UsersApiConfigurationExtensions.cs" company="geriremenyi.com">
+//     Author: Gergely Reményi
+//     Copyright (c) geriremenyi.com. All rights reserved.
+// </copyright>
+//----------------------------------------------------------------------------------------
+
+namespace ForexMiner.Heimdallr.Users.Api.Configuration
 {
     using AutoMapper;
     using ForexMiner.Heimdallr.Users.Api.Services;
@@ -7,13 +14,20 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.AspNetCore.Builder;
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
+    /// <summary>
+    /// Extension class for service configuration
+    /// </summary>
     public static class UsersApiConfigurationExtensions
     {
-        public static void AddUsersApiServices(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
+        /// <summary>
+        /// Add required services to the service collection
+        /// </summary>
+        /// <param name="services">The services</param>
+        /// <param name="configuration">The configuration object</param>
+        public static void AddUsersApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Cors policy
             services.AddCorsPolicy();
@@ -22,19 +36,27 @@
             services.AddProblemDetails();
 
             // JWT token
-            services.AddJwtAuthentication(configuration["Jwt:IssuerSigningKey"]);
+            services.AddJwtAuthentication(configuration["Jwt-IssuerSigningKey"]);
 
             // Database
-            services.AddDatabase(environment.IsDevelopment(), configuration["SqlServer:ConnectionString"], configuration["RedisCache:ConnectionString"]);
+            services.AddDatabase(configuration["SqlServer-ConnectionString"]);
 
-            // Other utilities
+            // Auto mapper
             services.AddAutoMapper(typeof(UsersApiConfigurationExtensions));
 
             // Local services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEntitySeedService, UserSeedService>();
         }
 
-        public static void UseUsersApiServices(this IApplicationBuilder app, IWebHostEnvironment environment, ForexMinerHeimdallrDbContext dbContext)
+        /// <summary>
+        /// Use the added services
+        /// </summary>
+        /// <param name="app">The application builder</param>
+        /// <param name="environment">The environment</param>
+        /// <param name="dbContext">The database context</param>
+        /// <param name="seedService">The entity seed service</param>
+        public static void UseUsersApiServices(this IApplicationBuilder app, IWebHostEnvironment environment, ForexMinerHeimdallrDbContext dbContext, IEntitySeedService seedService)
         {
             // CORS
             app.UseCorsPolicy();
@@ -43,7 +65,10 @@
             app.UseProblemDetails(environment.IsDevelopment());
 
             // Database migration
-            dbContext.MigrateDatabase();
+            dbContext.MigrateDatabase(environment.IsDevelopment());
+
+            // Seeding
+            seedService.Seed();
         }
     }
 }
