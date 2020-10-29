@@ -20,8 +20,6 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
     using Polly;
     using Microsoft.Extensions.Configuration;
     using Polly.Retry;
-    using GeriRemenyi.Oanda.V20.Sdk;
-    using GeriRemenyi.Oanda.V20.Sdk.Utilities;
     using AutoMapper;
     using ForexMiner.Heimdallr.Common.Data.Contracts.Trade;
     using System.IO;
@@ -31,6 +29,9 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
     using DbConnections = Heimdallr.Common.Data.Database.Models.Connection;
     using ContractConnections = Heimdallr.Common.Data.Contracts.Connection;
     using ForexMiner.Heimdallr.Connections.Secret.Services;
+    using GeriRemenyi.Oanda.V20.Sdk;
+    using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
+    using SdkTrade = GeriRemenyi.Oanda.V20.Sdk.Trade;
 
     /// <summary>
     /// Ticker service implementation
@@ -67,6 +68,8 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
         /// </summary>
         private readonly IMapper _mapper;
 
+        private readonly IOandaApiConnectionFactory _oandaApiConnectionFactory;
+
         /// <summary>
         /// Ticker service constructor
         /// Sets up the required service
@@ -80,7 +83,8 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
             ForexMinerHeimdallrDbContext dbContext, 
             IHttpClientFactory httpClientFactory,
             IConnectionsSecretService connectionsSecretService,
-            IMapper mapper
+            IMapper mapper,
+            IOandaApiConnectionFactory oandaApiConnectionFactory
         )
         {
             _configuration = configuration;
@@ -89,6 +93,7 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
             _retryPolicy = Policy.Handle<HttpRequestException>().RetryAsync(int.Parse(_configuration["forex-miner-thor:Max-Retries"]));
             _connectionsSecretService = connectionsSecretService;
             _mapper = mapper;
+            _oandaApiConnectionFactory = oandaApiConnectionFactory;
         }
 
         /// <summary>
@@ -140,13 +145,20 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
                 // Oanda
                 if (conn.Broker == DbConnections.Broker.Oanda)
                 {
-                    var oandaServer = conn.Type == ContractConnections.ConnectionType.Demo ? OandaServer.FxPractice : OandaServer.FxTrade;
-                    var oandaConnection = new ApiConnection(oandaServer, await _connectionsSecretService.GetConnectionSecret(conn.Id));
+                    var oandaServer = conn.Type == ContractConnections.ConnectionType.Demo ? OandaConnectionType.FxPractice : OandaConnectionType.FxTrade;
+                    var oandaConnection = _oandaApiConnectionFactory.CreateConnection(oandaServer, await _connectionsSecretService.GetConnectionSecret(conn.Id));
 
                     foreach (var ts in tradeSignals)
                     {
-                        var value = 10 * (ts.Direction == TradeDirection.Long ? 1 : -1);
-                        await oandaConnection.GetAccount(conn.ExternalAccountId).OpenTrade(_mapper.Map<GeriRemenyi.Oanda.V20.Client.Model.InstrumentName>(ts.Instrument), value, .01);
+                        await oandaConnection
+                            .GetAccount(conn.ExternalAccountId)
+                            .Trades
+                            .OpenTradeAsync(
+                                _mapper.Map<GeriRemenyi.Oanda.V20.Client.Model.InstrumentName>(ts.Instrument), 
+                                _mapper.Map<SdkTrade.TradeDirection>(ts.Direction),
+                                10,
+                                100
+                            );
                     }
                 }
             }
@@ -209,12 +221,12 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
         private async Task<IEnumerable<Oanda.Candlestick>> GetLastTwoCandles(InstrumentName instrument, Granularity granularity)
         {
             // Authenticate to OANDA with the master account
-            ApiConnection oandaConnection = new ApiConnection(OandaServer.FxPractice, _configuration["Oanda-MasterToken"]);
+            var oandaConnection = _oandaApiConnectionFactory.CreateConnection(OandaConnectionType.FxPractice, _configuration["Oanda-MasterToken"]);
 
             // Get last two candles
             var oandaInstrument = _mapper.Map<Oanda.InstrumentName>(instrument);
             var oandaGranularity = _mapper.Map<Oanda.CandlestickGranularity>(granularity);
-            var candles = await oandaConnection.GetInstrument(oandaInstrument).GetLastCandles(oandaGranularity, 2);
+            var candles = await oandaConnection.GetInstrument(oandaInstrument).GetLastNCandlesAsync(oandaGranularity, 2);
 
             return candles.OrderBy(candle => candle.Time);
         }

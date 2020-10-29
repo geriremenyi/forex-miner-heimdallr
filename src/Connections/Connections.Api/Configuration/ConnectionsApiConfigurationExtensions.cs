@@ -18,6 +18,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Configuration
     using Microsoft.Extensions.Hosting;
     using AutoMapper;
     using ForexMiner.Heimdallr.Common.Data.Mapping;
+    using GeriRemenyi.Oanda.V20.Sdk;
 
     /// <summary>
     /// Extension class for service configuration
@@ -49,6 +50,9 @@ namespace ForexMiner.Heimdallr.Connections.Api.Configuration
 
             // Connections secret service
             services.AddConnectionsSecretServices(environment.IsDevelopment(), configuration["KeyVault-Uri"], configuration["RedisCache-ConnectionString"]);
+
+            // Oanda API connection factory
+            services.AddScoped<IOandaApiConnectionFactory, OandaApiConnectionFactory>();
 
             // Local services
             services.AddScoped<IConnectionService, ConnectionService>();

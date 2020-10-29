@@ -12,6 +12,7 @@ namespace ForexMiner.Heimdallr.Common.Data.Mapping
     using AutoMapper.Extensions.EnumMapping;
     using Oanda = GeriRemenyi.Oanda.V20.Client.Model;
     using Contracts = Contracts;
+    using OandaSdk = GeriRemenyi.Oanda.V20.Sdk;
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
@@ -51,6 +52,7 @@ namespace ForexMiner.Heimdallr.Common.Data.Mapping
 
             // Trades
             CreateMap<Oanda.Trade, Contracts.Trade.Trade>().ReverseMap();
+            CreateMap<OandaSdk.Trade.TradeDirection, Contracts.Trade.TradeDirection>().ConvertUsingEnumMapping(options => options.MapByName()).ReverseMap(); ;
         }
     }
 }

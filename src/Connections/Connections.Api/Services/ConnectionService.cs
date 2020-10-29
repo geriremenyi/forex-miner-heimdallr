@@ -7,19 +7,19 @@
 
 namespace ForexMiner.Heimdallr.Connections.Api.Services
 {
-    using Contracts = Heimdallr.Common.Data.Contracts;
-    using Database = Heimdallr.Common.Data.Database.Models;
+    using Contracts = Common.Data.Contracts;
+    using Database = Common.Data.Database.Models;
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using System;
     using System.Collections.Generic;
     using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using AutoMapper;
-    using GeriRemenyi.Oanda.V20.Sdk;
-    using GeriRemenyi.Oanda.V20.Sdk.Utilities;
     using System.Threading.Tasks;
     using ForexMiner.Heimdallr.Connections.Secret.Services;
     using ForexMiner.Heimdallr.Common.Data.Database.Models.User;
+    using GeriRemenyi.Oanda.V20.Sdk;
+    using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
 
     /// <summary>
     /// Connection service implementation
@@ -41,11 +41,17 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
         /// </summary>
         private readonly IMapper _mapper;
 
-        public ConnectionService(ForexMinerHeimdallrDbContext dbContext, IConnectionsSecretService connectionsSecretService, IMapper mapper)
+        /// <summary>
+        /// Oanda API connection factory
+        /// </summary>
+        private readonly IOandaApiConnectionFactory _oandaApiConnectionFactory;
+
+       public ConnectionService(ForexMinerHeimdallrDbContext dbContext, IConnectionsSecretService connectionsSecretService, IMapper mapper, IOandaApiConnectionFactory oandaApiConnectionFactory)
         {
             _dbContext = dbContext;
             _connectionsSecretService = connectionsSecretService;
             _mapper = mapper;
+            _oandaApiConnectionFactory = oandaApiConnectionFactory;
         }
 
         /// <summary>
@@ -65,13 +71,13 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
                 // Oanda
                 if (conn.Broker == Database.Connection.Broker.Oanda)
                 {
-                    var oandaServer = conn.Type == Contracts.Connection.ConnectionType.Demo ? OandaServer.FxPractice : OandaServer.FxTrade;
-                    var oandaConnection = new ApiConnection(oandaServer, await _connectionsSecretService.GetConnectionSecret(conn.Id));
+                    var oandaServer = conn.Type == Contracts.Connection.ConnectionType.Demo ? OandaConnectionType.FxPractice : OandaConnectionType.FxTrade;
+                    var oandaConnection = _oandaApiConnectionFactory.CreateConnection(oandaServer, await _connectionsSecretService.GetConnectionSecret(conn.Id));
                     var oandAccount = oandaConnection.GetAccount(conn.ExternalAccountId);
-                    var oandaAccountDetails = await oandAccount.GetDetails();
+                    var oandaAccountDetails = await oandAccount.GetDetailsAsync();
                     conn.Balance = oandaAccountDetails.Balance;
                     conn.ProfitLoss = oandaAccountDetails.Pl;
-                    conn.OpenTrades = _mapper.Map<IEnumerable<Contracts.Trade.Trade>>(await oandAccount.GetOpenTrades());
+                    conn.OpenTrades = _mapper.Map<IEnumerable<Contracts.Trade.Trade>>(await oandAccount.Trades.GetOpenTradesAsync());
                 }
             }
 
@@ -84,7 +90,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
         /// </summary>
         /// <param name="connectionTest">The connection to test</param>
         /// <returns>The connection test results</returns>
-        public async Task<Contracts.Connection.ConnectionTestResults> TestConnection(Contracts.Connection.ConnectionTest connectionToTest)
+        public Contracts.Connection.ConnectionTestResults TestConnection(Contracts.Connection.ConnectionTest connectionToTest)
         {
             // Oanda
             if (connectionToTest.Broker == Database.Connection.Broker.Oanda)
@@ -92,8 +98,8 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
                 try
                 {
                     // Try demo first
-                    ApiConnection oandaConnection = new ApiConnection(OandaServer.FxPractice, connectionToTest.Secret);
-                    var accounts = await oandaConnection.GetAccounts();
+                    var oandaConnection = _oandaApiConnectionFactory.CreateConnection(OandaConnectionType.FxPractice, connectionToTest.Secret);
+                    var accounts = oandaConnection.GetAccounts();
                     var accountIds = accounts.Select(account => account.Id);
 
                     return new Contracts.Connection.ConnectionTestResults()
@@ -105,8 +111,8 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
                 catch
                 {
                     // If demo connection fails -> try live one
-                    ApiConnection oandaConnection = new ApiConnection(OandaServer.FxTrade, connectionToTest.Secret);
-                    var accounts = await oandaConnection.GetAccounts();
+                    var oandaConnection = _oandaApiConnectionFactory.CreateConnection(OandaConnectionType.FxTrade, connectionToTest.Secret);
+                    var accounts = oandaConnection.GetAccounts();
                     var accountIds = accounts.Select(account => account.Id);
 
                     return new Contracts.Connection.ConnectionTestResults()
@@ -131,7 +137,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
         {
             // First make sure that the connection is ok
             var connectionTest = _mapper.Map<Contracts.Connection.ConnectionTest>(connectionToCreate);
-            var testResult = await TestConnection(connectionTest);
+            var testResult = TestConnection(connectionTest);
 
             // TODO: make sure selected account id is ok
 

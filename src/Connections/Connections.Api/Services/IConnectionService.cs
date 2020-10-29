@@ -30,7 +30,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
         /// </summary>
         /// <param name="connectionTest">The connection to test</param>
         /// <returns>The connection test results</returns>
-        public Task<ConnectionTestResults> TestConnection(ConnectionTest connectionTest);
+        public ConnectionTestResults TestConnection(ConnectionTest connectionTest);
 
         /// <summary>
         /// Create a new connection for the user
