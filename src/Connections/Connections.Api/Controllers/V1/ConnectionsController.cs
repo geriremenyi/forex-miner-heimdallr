@@ -60,9 +60,9 @@ namespace ForexMiner.Heimdallr.Connections.Api.Controllers.V1
         /// </summary>
         /// <returns>The connection test results</returns>
         [HttpPost("test")]
-        public async Task<ConnectionTestResults> TestConnection([FromBody] ConnectionTest connectionTest)
+        public ConnectionTestResults TestConnection([FromBody] ConnectionTest connectionTest)
         {
-            return await _connectionService.TestConnection(connectionTest);
+            return _connectionService.TestConnection(connectionTest);
         }
 
         /// <summary>

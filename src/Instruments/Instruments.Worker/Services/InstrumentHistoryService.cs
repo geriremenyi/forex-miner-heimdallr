@@ -22,18 +22,18 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
     using System.Text;
     using System.Net.Http.Headers;
     using AutoMapper;
-    using GeriRemenyi.Oanda.V20.Sdk;
-    using GeriRemenyi.Oanda.V20.Sdk.Utilities;
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
     using ForexMiner.Heimdallr.Instruments.Storage.Services;
     using Contracts = Heimdallr.Common.Data.Contracts.Instrument;
     using Database = Heimdallr.Common.Data.Database.Models.Instrument;
     using GeriRemenyi.Oanda.V20.Client.Model;
+    using GeriRemenyi.Oanda.V20.Sdk;
+    using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
 
     /// <summary>
     /// History service implementation
     /// </summary>
-    class InstrumentHistoryService : IInstrumentHistoryService
+    public class InstrumentHistoryService : IInstrumentHistoryService
     {
         /// <summary>
         /// Collect instrument history data starting this date
@@ -71,6 +71,11 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
         private readonly IMapper _mapper;
 
         /// <summary>
+        /// Oanda API connection factory
+        /// </summary>
+        private readonly IOandaApiConnectionFactory _oandaApiConnectionFactory;
+
+        /// <summary>
         /// Instruments history service constructor
         /// Sets up the required services and objects
         /// </summary>
@@ -84,7 +89,8 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
             IHttpClientFactory httpClientFactory,
             ForexMinerHeimdallrDbContext dbContext,
             IInstrumentStorageService instrumentStorageService,
-            IMapper mapper
+            IMapper mapper,
+            IOandaApiConnectionFactory oandaApiConnectionFactory
         )
         {
             _configuration = configuration;
@@ -93,6 +99,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
             _dbContext = dbContext;
             _instrumentStorageService = instrumentStorageService;
             _mapper = mapper;
+            _oandaApiConnectionFactory = oandaApiConnectionFactory;
         }
 
         /// <summary>
@@ -151,10 +158,10 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
 
                     // Update granularity state to data loaded
                     granularity.State = Database.GranularityState.Tradeable;
-                }
 
-                // Save changes to DB
-                _dbContext.SaveChanges();
+                    // Save changes to DB
+                    _dbContext.SaveChanges();
+                }
             }
         }
 
@@ -165,12 +172,12 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
         private async Task<ICollection<Contracts.Candle>> GetCandlesBetween(Contracts.InstrumentName instrument, Contracts.Granularity granularity, DateTime utcFrom, DateTime utcTo)
         {
             // Authenticate to OANDA with the master account
-            ApiConnection oandaConnection = new ApiConnection(OandaServer.FxPractice, _configuration["Oanda-MasterToken"]);
+            var oandaConnection = _oandaApiConnectionFactory.CreateConnection(OandaConnectionType.FxPractice, _configuration["Oanda-MasterToken"]);
 
             // Get candles
             var oandaInstrument = _mapper.Map<InstrumentName>(instrument);
             var oandaGranularity = _mapper.Map<CandlestickGranularity>(granularity);
-            var candles = await oandaConnection.GetInstrument(oandaInstrument).GetCandles(oandaGranularity, utcFrom, utcTo);
+            var candles = await oandaConnection.GetInstrument(oandaInstrument).GetCandlesByTimeAsync(oandaGranularity, utcFrom, utcTo);
 
             return _mapper.Map<ICollection<Contracts.Candle>>(candles);
         }

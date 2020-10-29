@@ -12,6 +12,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Configuration
     using ForexMiner.Heimdallr.Common.Extensions;
     using ForexMiner.Heimdallr.Instruments.Configuration;
     using ForexMiner.Heimdallr.Instruments.Worker.Services;
+    using GeriRemenyi.Oanda.V20.Sdk;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using System;
@@ -44,6 +45,9 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Configuration
 
             // Auto mapper
             services.AddAutoMapper(typeof(ContractContractMappings), typeof(DatabaseContractMappings), typeof(OandaContractMappings));
+
+            // Oanda API connection factory
+            services.AddScoped<IOandaApiConnectionFactory, OandaApiConnectionFactory>();
 
             // Instrument worker services
             services.AddScoped<IInstrumentHistoryService, InstrumentHistoryService>();
