@@ -46,10 +46,13 @@ namespace Connections.Worker
         /// <returns>A complete task on start</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            var utcNow = DateTime.UtcNow;
+            var oneMinuteLater = utcNow.AddMinutes(1);
+            var nextMinuteAtFifthSecond = new DateTime(oneMinuteLater.Year, oneMinuteLater.Month, oneMinuteLater.Day, oneMinuteLater.Hour, oneMinuteLater.Minute, 5, DateTimeKind.Utc);
             _timer = new Timer(
                 Tick,
                 null,
-                TimeSpan.FromMinutes(int.Parse(_configuration["ConnectionsWorker-IntervalMin"])),
+                TimeSpan.FromSeconds((nextMinuteAtFifthSecond - utcNow).TotalSeconds),
                 TimeSpan.FromMinutes(int.Parse(_configuration["ConnectionsWorker-IntervalMin"]))
             );
             return Task.CompletedTask;

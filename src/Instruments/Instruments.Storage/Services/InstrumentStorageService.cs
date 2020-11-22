@@ -21,7 +21,7 @@ namespace ForexMiner.Heimdallr.Instruments.Storage.Services
     /// <summary>
     /// Storage account based instrument store implementation
     /// </summary>
-    class InstrumentStorageService : IInstrumentStorageService
+    public class InstrumentStorageService : IInstrumentStorageService
     {
         /// <summary>
         /// Name of the container the instruments are held in
@@ -121,8 +121,24 @@ namespace ForexMiner.Heimdallr.Instruments.Storage.Services
             // Upload that monthly data
             foreach (var yearAndMonth in candlesMonthly)
             {
+                // Candles to upload
+                var candlesToUpload = candlesMonthly[yearAndMonth.Key].ToList();
+
+                // Download monthly data if exists
+                try
+                {
+                    var startTime = new DateTime(yearAndMonth.Key.Year, yearAndMonth.Key.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+                    var endTime = new DateTime(yearAndMonth.Key.Year, yearAndMonth.Key.Month, DateTime.DaysInMonth(yearAndMonth.Key.Year, yearAndMonth.Key.Month), 0, 0, 0, DateTimeKind.Utc);
+                    var monthlyCandlesAlreadyThere = await GetInstrumentCandles(instrument.InstrumentName, instrument.Granularity, startTime, endTime);
+                    candlesToUpload.AddRange(monthlyCandlesAlreadyThere.Candles);
+                }
+                catch
+                { 
+                    // Swallow blob not found exception
+                }
+
                 // Serialize object to memory stream
-                var serializedCandles = JsonConvert.SerializeObject(candlesMonthly[yearAndMonth.Key]);
+                var serializedCandles = JsonConvert.SerializeObject(candlesToUpload);
                 using var stream = new MemoryStream(Encoding.UTF8.GetBytes(serializedCandles));
 
                 // Upload to blob

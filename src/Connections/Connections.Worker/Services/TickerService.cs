@@ -32,6 +32,8 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
     using GeriRemenyi.Oanda.V20.Sdk;
     using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
     using SdkTrade = GeriRemenyi.Oanda.V20.Sdk.Trade;
+    using ForexMiner.Heimdallr.Instruments.Storage.Services;
+    using System.Diagnostics;
 
     /// <summary>
     /// Ticker service implementation
@@ -68,7 +70,15 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
         /// </summary>
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Oanda connection factory
+        /// </summary>
         private readonly IOandaApiConnectionFactory _oandaApiConnectionFactory;
+
+        /// <summary>
+        /// Instrument storage service
+        /// </summary>
+        private readonly IInstrumentStorageService _instrumentStorageService;
 
         /// <summary>
         /// Ticker service constructor
@@ -84,7 +94,8 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
             IHttpClientFactory httpClientFactory,
             IConnectionsSecretService connectionsSecretService,
             IMapper mapper,
-            IOandaApiConnectionFactory oandaApiConnectionFactory
+            IOandaApiConnectionFactory oandaApiConnectionFactory,
+            IInstrumentStorageService instrumentStorageService
         )
         {
             _configuration = configuration;
@@ -94,6 +105,7 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
             _connectionsSecretService = connectionsSecretService;
             _mapper = mapper;
             _oandaApiConnectionFactory = oandaApiConnectionFactory;
+            _instrumentStorageService = instrumentStorageService;
         }
 
         /// <summary>
@@ -112,7 +124,7 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
             {
                 var lastTwoCandles = await GetLastTwoCandles(granularity.Instrument.Name, granularity.Granularity);
 
-                // Lat candle is not complete -> market is open
+                // Last candle is not complete -> market is open
                 if (!lastTwoCandles.ElementAt(1).Complete)
                 {
                     instrumentTicks.Add(new InstrumentWithCandles()
@@ -128,6 +140,14 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
             {
                 // Do not execute engine tick
                 return;
+            }
+
+            // Save them to the storage account
+            foreach (var tick in instrumentTicks)
+            {
+                // Let's eliminate storage account speed, failures should be handles
+                // within the service anyway so don't care is a safe option here
+                _ = _instrumentStorageService.StoreInstrumentCandles(tick);
             }
 
             // Tick them to the engine
@@ -150,14 +170,18 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
 
                     foreach (var ts in tradeSignals)
                     {
+                        // Use the 40% of liquid cash
+                        var account = await oandaConnection.GetAccount(conn.ExternalAccountId).GetDetailsAsync();
+                        var positionSize = (account.Balance + account.UnrealizedPL) * .4;
+
                         await oandaConnection
                             .GetAccount(conn.ExternalAccountId)
                             .Trades
                             .OpenTradeAsync(
                                 _mapper.Map<GeriRemenyi.Oanda.V20.Client.Model.InstrumentName>(ts.Instrument), 
                                 _mapper.Map<SdkTrade.TradeDirection>(ts.Direction),
-                                10,
-                                100
+                                Convert.ToInt64(Math.Floor(positionSize)),
+                                900 // Stop loss: 900 pips
                             );
                     }
                 }

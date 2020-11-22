@@ -29,6 +29,8 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
     using GeriRemenyi.Oanda.V20.Client.Model;
     using GeriRemenyi.Oanda.V20.Sdk;
     using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
+    using System.Diagnostics;
+    using Microsoft.VisualBasic.CompilerServices;
 
     /// <summary>
     /// History service implementation
@@ -110,7 +112,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
         public async Task CheckInstrumentGranularitiesAndLoadData()
         {
             // Collect all new granularities
-            var newGranularities = GetNewGranularities();
+            var newGranularities = GetNewGranularities().ToList();
 
             // Mark them as in process
             foreach (var granularity in newGranularities)
@@ -123,15 +125,14 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
                 _dbContext.SaveChanges();
 
                 // Get the data loading ones
-                var dataLoadingGranularities = GetInDatLoadingGranularities();
+                var dataLoadingGranularities = GetInDatLoadingGranularities().ToList();
 
                 // Actually start processing them
                 foreach (var granularity in dataLoadingGranularities)
                 {
                     // Monthly processing
                     var utcBeginningOfTheMonth = new DateTime(START_TIME.Year, START_TIME.Month, 1, 0, 0, 0, DateTimeKind.Utc);
-                    var utcNow = DateTime.UtcNow;
-                    var utcEndTime = new DateTime(utcNow.Year, utcNow.Month, utcNow.AddDays(-1).Day, 23, 59, 59);
+                    var utcEndTime = DateTime.UtcNow;
                     while (utcBeginningOfTheMonth <= utcEndTime)
                     {
                         var endOfTheMonth = new DateTime(utcBeginningOfTheMonth.Year, utcBeginningOfTheMonth.Month, utcBeginningOfTheMonth.AddMonths(1).AddDays(-1).Day, 0, 0, 0, DateTimeKind.Utc);
@@ -160,6 +161,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
                     granularity.State = Database.GranularityState.Tradeable;
 
                     // Save changes to DB
+                    _dbContext.Update(granularity);
                     _dbContext.SaveChanges();
                 }
             }

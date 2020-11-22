@@ -10,7 +10,7 @@ namespace ForexMiner.Heimdallr.Common.Data.Database.Models.Instrument
     /// <summary>
     /// Possible granularity states
     /// </summary>
-    public enum  GranularityState
+    public enum GranularityState
     {
         /// <summary>
         /// The granularity was just added

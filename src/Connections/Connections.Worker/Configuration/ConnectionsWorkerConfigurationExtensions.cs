@@ -18,6 +18,8 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Configuration
     using AutoMapper;
     using ForexMiner.Heimdallr.Common.Data.Mapping;
     using GeriRemenyi.Oanda.V20.Sdk;
+    using ForexMiner.Heimdallr.Instruments.Storage.Services;
+    using ForexMiner.Heimdallr.Instruments.Configuration;
 
     /// <summary>
     /// Extension methods for connections worker service configuration
@@ -49,6 +51,9 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Configuration
 
             // Oanda API connection factory
             services.AddScoped<IOandaApiConnectionFactory, OandaApiConnectionFactory>();
+
+            // Instrument storage service
+            services.AddInstrumentsStorageServices(configuration["StorageAccount-ConnectionString"]);
 
             // Connections worker services
             services.AddScoped<ITickerService, TickerService>();
