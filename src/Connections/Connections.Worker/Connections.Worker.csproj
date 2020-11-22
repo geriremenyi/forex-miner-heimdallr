@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Data\Common.Data.csproj" />
     <ProjectReference Include="..\..\Common\Common.Extensions\Common.Extensions.csproj" />
+    <ProjectReference Include="..\..\Instruments\Instruments.Storage\Instruments.Storage.csproj" />
     <ProjectReference Include="..\Connections.Secret\Connections.Secret.csproj" />
   </ItemGroup>
 
