@@ -1,0 +1,11 @@
+kind: Service 
+apiVersion: v1
+metadata:
+  name: forex-miner-heimdallr-instruments-api
+  namespace: forex-miner
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+  selector:
+    app: forex-miner-heimdallr-instruments-api
