@@ -1,0 +1,24 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: forex-miner-heimdallr-instruments-api
+  namespace: forex-miner
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: forex-miner-heimdallr-instruments-api
+  template:
+    metadata:
+      labels:
+        app: forex-miner-heimdallr-instruments-api
+    spec:
+      containers:
+        - name: forex-miner-heimdallr-instruments-api
+          image: ghcr.io/geriremenyi/forex-miner-heimdallr-instruments-api:latest
+          ports:
+            - containerPort: 80
+      imagePullSecrets:
+        - name: ghcr-secret
+      nodeSelector:
+        agentpool: fmnpfe
