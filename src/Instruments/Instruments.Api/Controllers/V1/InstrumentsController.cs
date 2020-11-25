@@ -33,7 +33,7 @@ namespace ForexMiner.Heimdallr.Instruments.Api.Controllers.V1
         /// Sets up the instrument service
         /// </summary>
         /// <param name="instrumentService"></param>
-        public InstrumentsController(IInstrumentService instrumentService, IMapper mapper)
+        public InstrumentsController(IInstrumentService instrumentService)
         {
             _instrumentService = instrumentService;
         }
@@ -65,7 +65,7 @@ namespace ForexMiner.Heimdallr.Instruments.Api.Controllers.V1
         /// <returns>The instrument which the granularity was added to</returns>
         [Authorize(Roles = "Admin")]
         [HttpPost("{instrument}/granularities")]
-        public Instrument AddGranularities([FromRoute] InstrumentName instrument, [FromBody] InstrumentGranularityCreation granularity)
+        public Instrument AddGranularity([FromRoute] InstrumentName instrument, [FromBody] InstrumentGranularityCreation granularity)
         {
             return _instrumentService.AddGranularity(instrument, granularity);
         }
