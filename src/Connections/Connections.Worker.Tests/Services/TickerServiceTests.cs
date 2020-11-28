@@ -1,4 +1,4 @@
-namespace Connections.Worker.Tests
+namespace Connections.Worker.Tests.Services
 {
     using AutoMapper;
     using ForexMiner.Heimdallr.Common.Data.Database.Context;
