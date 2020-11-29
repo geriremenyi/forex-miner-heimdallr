@@ -20,6 +20,7 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
     using ForexMiner.Heimdallr.Common.Data.Database.Models.User;
     using GeriRemenyi.Oanda.V20.Sdk;
     using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
+    using ForexMiner.Heimdallr.Common.Data.Exceptions;
 
     /// <summary>
     /// Connection service implementation
@@ -73,11 +74,11 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
                 {
                     var oandaServer = conn.Type == Contracts.Connection.ConnectionType.Demo ? OandaConnectionType.FxPractice : OandaConnectionType.FxTrade;
                     var oandaConnection = _oandaApiConnectionFactory.CreateConnection(oandaServer, await _connectionsSecretService.GetConnectionSecret(conn.Id));
-                    var oandAccount = oandaConnection.GetAccount(conn.ExternalAccountId);
-                    var oandaAccountDetails = await oandAccount.GetDetailsAsync();
+                    var oandaAccount = oandaConnection.GetAccount(conn.ExternalAccountId);
+                    var oandaAccountDetails = await oandaAccount.GetDetailsAsync();
                     conn.Balance = oandaAccountDetails.Balance;
                     conn.ProfitLoss = oandaAccountDetails.Pl;
-                    conn.OpenTrades = _mapper.Map<IEnumerable<Contracts.Trade.Trade>>(await oandAccount.Trades.GetOpenTradesAsync());
+                    conn.OpenTrades = _mapper.Map<IEnumerable<Contracts.Trade.Trade>>(await oandaAccount.Trades.GetOpenTradesAsync());
                 }
             }
 
@@ -110,21 +111,30 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
                 }
                 catch
                 {
-                    // If demo connection fails -> try live one
-                    var oandaConnection = _oandaApiConnectionFactory.CreateConnection(OandaConnectionType.FxTrade, connectionToTest.Secret);
-                    var accounts = oandaConnection.GetAccounts();
-                    var accountIds = accounts.Select(account => account.Id);
-
-                    return new Contracts.Connection.ConnectionTestResults()
+                    try
                     {
-                        Type = Contracts.Connection.ConnectionType.Demo,
-                        AccountIds = accountIds
-                    };
+                        // If demo connection fails -> try live one
+                        var oandaConnection = _oandaApiConnectionFactory.CreateConnection(OandaConnectionType.FxTrade, connectionToTest.Secret);
+                        var accounts = oandaConnection.GetAccounts();
+                        var accountIds = accounts.Select(account => account.Id);
+
+                        return new Contracts.Connection.ConnectionTestResults()
+                        {
+                            Type = Contracts.Connection.ConnectionType.Live,
+                            AccountIds = accountIds
+                        };
+                    }
+                    catch
+                    { 
+                        // Swallow and throw exception at the end of the method
+                    }
                 }
             }
 
-            // TODO: better exception
-            throw new Exception("Connection test failed");
+            throw new ProblemDetailsException(
+                System.Net.HttpStatusCode.BadRequest,
+                $"Not able to establish a broker connection with the given credentials."
+            );
         }
 
         /// <summary>
@@ -139,7 +149,13 @@ namespace ForexMiner.Heimdallr.Connections.Api.Services
             var connectionTest = _mapper.Map<Contracts.Connection.ConnectionTest>(connectionToCreate);
             var testResult = TestConnection(connectionTest);
 
-            // TODO: make sure selected account id is ok
+            if (!testResult.AccountIds.Contains(connectionToCreate.ExternalAccountId))
+            {
+                throw new ProblemDetailsException(
+                    System.Net.HttpStatusCode.BadRequest, 
+                    $"The account id '{connectionToCreate.ExternalAccountId}' doesn't exist in the connection."
+                );
+            }
 
             // If it is then
             // 1. Save the connection to the DB
