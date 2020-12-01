@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: dotnet build ./src/Instruments/Instruments.Api/Instruments.Api.csproj
   instruments-api-test:
-    name: Test  Instruments.Api
+    name: Test Instruments.Api
     runs-on: ubuntu-latest
     needs: [instruments-api-build]
     steps:
