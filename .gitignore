@@ -7,3 +7,9 @@ gen
 
 # IDE files
 .vs
+
+# Launch settings
+launchSettings.json
+
+# User csproj files
+*.csproj.user
