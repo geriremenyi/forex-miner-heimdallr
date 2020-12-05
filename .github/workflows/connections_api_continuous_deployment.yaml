@@ -69,7 +69,7 @@ jobs:
             ghcr.io/geriremenyi/forex-miner-heimdallr-connections-api:latest
 
   connections-api-deploy:
-    name: Deploy
+    name: Deploy Connections.Api
     needs: [connections-api-release]
     runs-on: ubuntu-latest
     steps:
