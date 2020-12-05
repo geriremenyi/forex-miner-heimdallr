@@ -50,8 +50,8 @@ jobs:
       - name: Get version
         id: package-version
         run: |
-          echo "$(./scripts/get_version.sh ./src/Users/Users.Api.Tests/Users.Api.csproj)" 
-          echo "::set-output name=current-version::$(./scripts/get_version.sh ./src/Users/Users.Api.Tests/Users.Api.csproj)"
+          echo "$(./scripts/get_version.sh ./src/Users/Users.Api/Users.Api.csproj)" 
+          echo "::set-output name=current-version::$(./scripts/get_version.sh ./src/Users/Users.Api/Users.Api.csproj)"
 
       - name: Login to ghcr
         uses: docker/login-action@v1
@@ -108,5 +108,5 @@ jobs:
         run: |
           ./init.ps1
           kubectl create secret docker-registry ghcr-secret --namespace=forex-miner --docker-server=https://ghcr.io/ --docker-username=notneeded --docker-password=${{ secrets.GH_PAT }}
-          Deploy-KubernetesResource -ResourceYamlFileName 'app.yaml' -ResourceFolder '../Users/Users.Api/Kubernetes'
-          Deploy-KubernetesResource -ResourceYamlFileName 'service.yaml' -ResourceFolder '../Users/Users.Api/Kubernetes'
+          Deploy-KubernetesResource -ResourceYamlFileName 'app.yaml' -ResourceFolder '../src/Users/Users.Api/Kubernetes'
+          Deploy-KubernetesResource -ResourceYamlFileName 'service.yaml' -ResourceFolder '../src/Users/Users.Api/Kubernetes'
