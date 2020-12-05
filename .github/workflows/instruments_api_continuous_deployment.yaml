@@ -69,7 +69,7 @@ jobs:
             ghcr.io/geriremenyi/forex-miner-heimdallr-instruments-api:latest
 
   instruments-api-deploy:
-    name: Deploy
+    name: Deploy Instruments.Api
     needs: [instruments-api-release]
     runs-on: ubuntu-latest
     steps:

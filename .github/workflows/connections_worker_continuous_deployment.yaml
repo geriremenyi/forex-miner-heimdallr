@@ -69,7 +69,7 @@ jobs:
             ghcr.io/geriremenyi/forex-miner-heimdallr-connections-worker:latest
 
   connections-worker-deploy:
-    name: Deploy
+    name: Deploy Connections.Worker
     needs: [connections-worker-release]
     runs-on: ubuntu-latest
     steps:

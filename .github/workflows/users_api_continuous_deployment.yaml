@@ -79,7 +79,7 @@ jobs:
           prerelease: false
 
   users-api-deploy:
-    name: Deploy
+    name: Deploy Users.Api
     needs: [users-api-release]
     runs-on: ubuntu-latest
     steps:
