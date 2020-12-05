@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: forex-miner-heimdallr-instruments-worker
-          image: ghcr.io/geriremenyi/forex-miner-heimdallr-instruments-worker:latest
+          image: ghcr.io/geriremenyi/forex-miner-heimdallr-instruments-worker:0.0.1
       imagePullSecrets:
         - name: ghcr-secret
       nodeSelector:

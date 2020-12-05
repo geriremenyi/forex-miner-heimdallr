@@ -7,6 +7,7 @@
     <DockerfileContext>..\..</DockerfileContext>
     <AssemblyName>ForexMiner.Heimdallr.Connections.Worker</AssemblyName>
     <RootNamespace>ForexMiner.Heimdallr.Connections.Worker</RootNamespace>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

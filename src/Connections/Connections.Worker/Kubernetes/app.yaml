@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: forex-miner-heimdallr-connections-worker
-          image: ghcr.io/geriremenyi/forex-miner-heimdallr-connections-worker:latest
+          image: ghcr.io/geriremenyi/forex-miner-heimdallr-connections-worker:0.0.1
       imagePullSecrets:
         - name: ghcr-secret
       nodeSelector:
