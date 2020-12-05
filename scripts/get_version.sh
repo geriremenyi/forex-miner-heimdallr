@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Parameters to named parameters
 project_file=$1
