@@ -111,6 +111,8 @@ The steps are defined separately for all deployable component.
 - [Instruments.Worker](.github/workflows/instruments_worker_continuous_deployment.yaml)
 - [Users.Api](.github/workflows/users_api_continuous_deployment.yaml)
 
+To actually trigger a new release with a new version, please checkout from [develop branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/develop) to a release branch (like: `git checkout -b releases/0.0.1`). On this branch run the [`./scripts/bump_version.sh`](scripts/bump_version.sh) script with any of the following parameters `patch|minor|major`. If no parameter given, the `patch` version will be bumped. After this update and merge the [master branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/master) to the release branch and accept all current changes (to resolve merge conflicts coming from master). If finished push the release branch to GitHub and open PR against the [develop branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/develop) and the [master branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/master). After completing the PR against the master branch the CD workflows will automatically kick in. This will create a new [tag](https://github.com/geriremenyi/forex-miner-heimdallr/tags) and a new [release](https://github.com/geriremenyi/forex-miner-heimdallr/releases).
+
 ### Kubernetes Cluster
 
 The kubernetes deployments are defined under each deployable project's Kubernetes folder.
