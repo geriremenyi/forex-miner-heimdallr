@@ -13,3 +13,6 @@ launchSettings.json
 
 # User csproj files
 *.csproj.user
+
+# Local dev secrets
+*.Secrets.json

@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>dotnet-Instruments.Worker-A19A7C62-1D64-4B67-ADE5-9C2D0D10B843</UserSecretsId>
     <AssemblyName>ForexMiner.Heimdallr.Instruments.Worker</AssemblyName>
     <RootNamespace>ForexMiner.Heimdallr.Instruments.Worker</RootNamespace>
     <Version>0.0.1</Version>

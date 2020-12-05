@@ -33,7 +33,6 @@ namespace ForexMiner.Heimdallr.Connections.Worker.Services
     using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
     using SdkTrade = GeriRemenyi.Oanda.V20.Sdk.Trade;
     using ForexMiner.Heimdallr.Instruments.Storage.Services;
-    using System.Diagnostics;
 
     /// <summary>
     /// Ticker service implementation

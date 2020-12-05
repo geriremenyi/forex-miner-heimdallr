@@ -5,7 +5,6 @@
     <AssemblyName>ForexMiner.Heimdallr.Instruments.Api</AssemblyName>
     <RootNamespace>ForexMiner.Heimdallr.Instruments.Api</RootNamespace>
     <Version>0.0.1</Version>
-    <UserSecretsId>369078ea-e191-447f-8837-8e995d69af42</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
