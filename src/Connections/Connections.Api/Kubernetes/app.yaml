@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: forex-miner-heimdallr-connections-api
-          image: ghcr.io/geriremenyi/forex-miner-heimdallr-connections-api:latest
+          image: ghcr.io/geriremenyi/forex-miner-heimdallr-connections-api:0.0.1
           ports:
             - containerPort: 80
       imagePullSecrets:

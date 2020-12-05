@@ -5,6 +5,7 @@
     <UserSecretsId>dotnet-Instruments.Worker-A19A7C62-1D64-4B67-ADE5-9C2D0D10B843</UserSecretsId>
     <AssemblyName>ForexMiner.Heimdallr.Instruments.Worker</AssemblyName>
     <RootNamespace>ForexMiner.Heimdallr.Instruments.Worker</RootNamespace>
+    <Version>0.0.1</Version>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
