@@ -8,6 +8,7 @@
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <AssemblyName>ForexMiner.Heimdallr.Users.Api</AssemblyName>
     <RootNamespace>ForexMiner.Heimdallr.Users.Api</RootNamespace>
+    <Version>0.0.1</Version>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 

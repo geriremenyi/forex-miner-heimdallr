@@ -64,7 +64,7 @@ docker-compose -f src/docker-compose.yml up
 
 If there are changes in the datamodel there is a need to create a new data migration which can be done with the following command:
 ```bash
-dotnet ef migrations add {MigrationName} -c ForexMiner.Heimdallr.Common.Data.Database.Context.ForexMinerHeimdallrDbContext -p ./src/Common/Common.Data -o Database/Migrati  ons -s ./src/Users/Users.Api 
+dotnet ef migrations add {MigrationName} -c ForexMiner.Heimdallr.Common.Data.Database.Context.ForexMinerHeimdallrDbContext -p ./src/Common/Common.Data -o Database/Migrations -s ./src/Users/Users.Api 
 ```
 
 ### Tests
