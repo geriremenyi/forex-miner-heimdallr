@@ -78,9 +78,9 @@ jobs:
           draft: false
           prerelease: false
 
-  deploy:
+  users-api-deploy:
     name: Deploy
-    needs: [release]
+    needs: [users-api-release]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
