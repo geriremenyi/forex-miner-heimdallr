@@ -1,0 +1,52 @@
+name: Instruments.Worker Continuous Integration
+on: [pull_request]
+jobs:
+  instruments-worker-build:
+    name: Build Instruments.Worker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build
+        run: dotnet build ./src/Instruments/Instruments.Worker/Instruments.Worker.csproj
+  instruments-worker-test:
+    name: Test Instruments.Worker
+    runs-on: ubuntu-latest
+    needs: [instruments-worker-build]
+    steps:
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Test
+        run: dotnet test ./src/Instruments/Instruments.Worker.Tests/Instruments.Worker.Tests.csproj
+  instruments-worker-docker-build:
+    name: Docker build Instruments.Worker
+    runs-on: ubuntu-latest
+    needs: [instruments-worker-build, instruments-worker-test]
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./src
+          file: ./src/Instruments/Instruments.Worker/Dockerfile
+          push: false

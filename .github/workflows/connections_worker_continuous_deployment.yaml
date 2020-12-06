@@ -1,0 +1,99 @@
+name: Connections.Worker Continuous Deployment
+on:
+  push:
+    branches:
+      - master
+jobs:
+  connections-worker-build:
+    name: Build Connections.Worker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build
+        run: dotnet build ./src/Connections/Connections.Worker/Connections.Worker.csproj
+  connections-worker-test:
+    name: Test Connections.Worker
+    runs-on: ubuntu-latest
+    needs: [connections-worker-build]
+    steps:
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Test
+        run: dotnet test ./src/Connections/Connections.Worker.Tests/Connections.Worker.Tests.csproj
+  connections-worker-release:
+    name: Tag and release Connections.Worker
+    runs-on: ubuntu-latest
+    needs: [connections-worker-build, connections-worker-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Get version
+        id: package-version
+        run: echo "::set-output name=current-version::$(./scripts/get_version.sh ./src/Connections/Connections.Worker/Connections.Worker.csproj)"
+
+      - name: Login to ghcr
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_PAT }}
+
+      - name: Publish Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./src
+          file: ./src/Connections/Connections.Worker/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/geriremenyi/forex-miner-heimdallr-connections-worker:${{ steps.package-version.outputs.current-version }}
+            ghcr.io/geriremenyi/forex-miner-heimdallr-connections-worker:latest
+
+  connections-worker-deploy:
+    name: Deploy Connections.Worker
+    needs: [connections-worker-release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkout IaaC
+        uses: actions/checkout@v2
+        with:
+          repository: geriremenyi/forex-miner-asgard
+          ref: master
+          path: forex-miner-asgard
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Connect to AKS
+        working-directory: forex-miner-asgard
+        shell: pwsh
+        run: |
+          ./init.ps1 -ApplicationId "${{ secrets.AZURE_APPLICATION_ID }}" -Secret "${{ secrets.AZURE_SECRET }}" -Tenant "${{ secrets.AZURE_TENANT }}"
+          Connect-AKSCluster
+      - name: Deploy to AKS
+        shell: pwsh
+        working-directory: forex-miner-asgard
+        run: |
+          ./init.ps1
+          kubectl create secret docker-registry ghcr-secret --namespace=forex-miner --docker-server=https://ghcr.io/ --docker-username=notneeded --docker-password=${{ secrets.GH_PAT }}
+          Deploy-KubernetesResource -ResourceYamlFileName 'app.yaml' -ResourceFolder '../src/Connections/Connections.Worker/Kubernetes'

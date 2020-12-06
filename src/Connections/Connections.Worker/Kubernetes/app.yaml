@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: forex-miner-heimdallr-connections-worker
+  namespace: forex-miner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forex-miner-heimdallr-connections-worker
+  template:
+    metadata:
+      labels:
+        app: forex-miner-heimdallr-connections-worker
+    spec:
+      containers:
+        - name: forex-miner-heimdallr-connections-worker
+          image: ghcr.io/geriremenyi/forex-miner-heimdallr-connections-worker:0.0.1
+      imagePullSecrets:
+        - name: ghcr-secret
+      nodeSelector:
+        agentpool: fmnpbe

@@ -1,0 +1,18 @@
+# Output folders
+out
+objd
+obj
+bin
+gen
+
+# IDE files
+.vs
+
+# Launch settings
+launchSettings.json
+
+# User csproj files
+*.csproj.user
+
+# Local dev secrets
+*.Secrets.json
