@@ -9,7 +9,7 @@ The repo's name is coming from the Norse mythology, in which [Heimdallr](https:/
 ### Prerequisites
 
 - [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download) to build, run etc.
-- [Docker](https://www.docker.com/products/docker-desktop) (optional) to contenarize
+- [Docker](https://www.docker.com/products/docker-desktop) (optional) to containerize.
 - [Visual Studio](https://visualstudio.microsoft.com) (optional) as the IDE.
 
 ### Local setup
@@ -25,6 +25,11 @@ git@github.com:geriremenyi/forex-miner-heimdallr.git
 2. Navigate to the root of the project and restore nuget packages for all sub-component
 ```bash
 dotnet restore src/ForexMiner.Heimdallr.sln
+```
+
+3. Generate development secrets (an example token is given in the documentation)
+```bash
+./scripts add_oanda_master_token.sh "{OANDA_TOKEN}"
 ```
 
 ### Run
@@ -111,7 +116,45 @@ The steps are defined separately for all deployable component.
 - [Instruments.Worker](.github/workflows/instruments_worker_continuous_deployment.yaml)
 - [Users.Api](.github/workflows/users_api_continuous_deployment.yaml)
 
-To actually trigger a new release with a new version, please checkout from [develop branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/develop) to a release branch (like: `git checkout -b releases/0.0.1`). On this branch run the [`./scripts/bump_version.sh`](scripts/bump_version.sh) script with any of the following parameters `patch|minor|major`. If no parameter given, the `patch` version will be bumped. After this update and merge the [master branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/master) to the release branch and accept all current changes (to resolve merge conflicts coming from master). If finished push the release branch to GitHub and open PR against the [develop branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/develop) and the [master branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/master). After completing the PR against the master branch the CD workflows will automatically kick in. This will create a new [tag](https://github.com/geriremenyi/forex-miner-heimdallr/tags) and a new [release](https://github.com/geriremenyi/forex-miner-heimdallr/releases).
+To create and deploy a new version of the service run the following:
+
+1. Checkout from [develop branch](https://github.com/geriremenyi/forex-miner-heimdallr/tree/master) and create a new release branch
+```bash
+git checkout -b releases/x.y.z
+```
+
+2. Bump the version
+```bash
+# Bump patch version (x.y.z -> x.y.z+1)
+./scripts/bump_version patch
+# Bump minor version (x.y.z -> x.y+1.z)
+./scripts/bump_version minor
+# Bump major version (x.y.z -> x+1.y.z)
+./scripts/bump_version major
+```
+
+3. Commit changes
+```bash
+git add .
+git commit -m "Release x.y.z"
+```
+
+4. Checkout, update master and merge it to the release branch
+```bash
+git checkout master
+git pull
+git checkout releases/x.y.z
+git merge master --strategy-option ours
+```
+
+5. Push it to GitHub
+```bash
+git push --set-upstream origin releases/x.y.z
+```
+
+6. Open a PR against the [master](https://github.com/geriremenyi/forex-miner-heimdallr/tree/master) and the [develop](https://github.com/geriremenyi/forex-miner-heimdallr/tree/develop) branch
+
+7. After completing the PR against the master branch the CD workflow kicks in and will deploy the new version
 
 ### Kubernetes Cluster
 
