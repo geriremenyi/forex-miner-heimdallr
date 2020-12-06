@@ -78,6 +78,7 @@ namespace Connections.Api.Tests.Controllers.V1
             Assert.Equal(ConnectionType.Demo, testResults.Type);
         }
 
+        [Fact]
         public async void CreateConnection()
         {
             // Arrange

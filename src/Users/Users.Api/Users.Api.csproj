@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>2d6d7e4d-2d6e-471a-8993-2f6c83c473ba</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileTag>geriremenyi/forex-miner-heimdallr-users-api</DockerfileTag>
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>

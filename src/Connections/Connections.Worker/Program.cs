@@ -34,6 +34,7 @@ namespace Connections.Worker
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureKeyVaultConfigurationProvider()
+                .ConfigureSecretConfigurationConfigurationProvider()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddConnectionsWorkerServices(hostContext.HostingEnvironment, hostContext.Configuration);

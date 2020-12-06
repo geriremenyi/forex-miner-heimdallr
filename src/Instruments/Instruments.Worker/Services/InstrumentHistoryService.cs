@@ -29,8 +29,6 @@ namespace ForexMiner.Heimdallr.Instruments.Worker.Services
     using GeriRemenyi.Oanda.V20.Client.Model;
     using GeriRemenyi.Oanda.V20.Sdk;
     using GeriRemenyi.Oanda.V20.Sdk.Common.Types;
-    using System.Diagnostics;
-    using Microsoft.VisualBasic.CompilerServices;
 
     /// <summary>
     /// History service implementation

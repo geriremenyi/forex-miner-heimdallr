@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>dotnet-Connections.Worker-4AE7AE76-B157-452A-978A-8025BED0EBF8</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <AssemblyName>ForexMiner.Heimdallr.Connections.Worker</AssemblyName>

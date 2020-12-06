@@ -34,6 +34,7 @@ namespace ForexMiner.Heimdallr.Instruments.Worker
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureKeyVaultConfigurationProvider()
+                .ConfigureSecretConfigurationConfigurationProvider()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddInstrumentsWorkerServices(hostContext.Configuration);
